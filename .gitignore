@@ -14,3 +14,9 @@ env.*
 .DS_Store
 .idea/
 .vscode/
+
+# Cache
+.cache/
+
+# Generated
+src/generated/
