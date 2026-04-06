@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "openapi:fetch": "./src/tools/fetch-api.sh",
+    "openapi:fetch:verbose": "set -x; ./src/tools/fetch-api.sh"
+  },
   "dependencies": {
     "@azure/service-bus": "^7.9.5",
     "dotenv": "^17.4.1",
