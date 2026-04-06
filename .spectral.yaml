@@ -1,0 +1,19 @@
+extends:
+  - "spectral:oas"
+
+rules:
+  operation-operationId-unique: true
+  operation-description:
+    description: Every operation should have a description.
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: description
+      function: truthy
+  operation-security-defined:
+    description: Every operation should define security explicitly.
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: security
+      function: defined

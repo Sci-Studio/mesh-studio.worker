@@ -3,6 +3,7 @@
     "openapi:fetch": "bash ./src/tools/fetch-api.sh",
     "openapi:fetch:verbose": "bash -x ./src/tools/fetch-api.sh",
     "openapi:generate": "npm run openapi:fetch && openapi-ts -f openapi-ts.config.ts",
+    "openapi:lint": "spectral lint .cache/mesh-studio.api/openapi/ms/openapi.yaml",
     "openapi:watch": "openapi-ts -f openapi-ts.config.ts -w"
   },
   "dependencies": {
@@ -12,6 +13,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.95.0",
+    "@stoplight/spectral-cli": "^6.15.0",
     "@types/node": "^25.5.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
