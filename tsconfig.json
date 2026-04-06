@@ -6,7 +6,8 @@
         "paths": {
             "@generated": ["src/generated/index.ts"],
             "@generated/*": ["src/generated/*"]
-        }
+        },
+        "esModuleInterop": true,
     },
     "include": ["src/**/*.ts"],
 }
