@@ -1,7 +1,9 @@
 {
   "scripts": {
-    "openapi:fetch": "./src/tools/fetch-api.sh",
-    "openapi:fetch:verbose": "set -x; ./src/tools/fetch-api.sh"
+    "openapi:fetch": "bash ./src/tools/fetch-api.sh",
+    "openapi:fetch:verbose": "bash -x ./src/tools/fetch-api.sh",
+    "openapi:generate": "npm run openapi:fetch && openapi-ts -f openapi-ts.config.ts",
+    "openapi:watch": "openapi-ts -f openapi-ts.config.ts -w"
   },
   "dependencies": {
     "@azure/service-bus": "^7.9.5",
