@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+coverage/
+*.log
+
+# Local environment files
+env.*
+!env.example
+.env*
+!.env.example
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
