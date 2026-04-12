@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# Fetches only the OpenAPI tree via sparse checkout.
+#
+# Authentication (pick one):
+#   - GITHUB_TOKEN or GH_TOKEN — fine-grained or classic PAT with repo read
+#   - GitHub CLI: run `gh auth login` (uses `gh auth git-credential` for HTTPS)
+#   - SSH: REPO_URL=git@github.com:OWNER/REPO.git (uses your SSH key)
 set -euo pipefail
 
 ORIGINAL_REPO_URL="${REPO_URL:-https://github.com/Sci-Studio/mesh-studio.api.git}"
@@ -6,17 +12,39 @@ REPO_URL="$ORIGINAL_REPO_URL"
 DEST_DIR="${DEST_DIR:-.cache/mesh-studio.api}"
 SPARSE_PATH="${SPARSE_PATH:-openapi}"
 
-if [ -n "${GITHUB_TOKEN:-}" ] && [[ "$REPO_URL" =~ ^https://github\.com/ ]]; then
-  REPO_URL="${REPO_URL/https:\/\/github.com\//https:\/\/x-access-token:${GITHUB_TOKEN}@github.com\/}"
+# Extra `git -c ...` args for HTTPS when using GitHub CLI (no token in URL).
+GIT_AUTH=()
+TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
+
+if [ -n "$TOKEN" ] && [[ "$REPO_URL" =~ ^https://github\.com/ ]]; then
+  REPO_URL="${REPO_URL/https:\/\/github.com\//https:\/\/x-access-token:${TOKEN}@github.com\/}"
+elif [[ "$REPO_URL" =~ ^https://github\.com/ ]]; then
+  if command -v gh >/dev/null 2>&1 && gh auth status -h github.com >/dev/null 2>&1; then
+    GIT_AUTH=(-c "credential.helper=!gh auth git-credential")
+  fi
 fi
 
-DEFAULT_REF="$(
-  git ls-remote --symref "$REPO_URL" HEAD \
-    | awk '/^ref:/ { sub("refs/heads/", "", $2); print $2; exit }'
-)"
+auth_hint() {
+  echo "" >&2
+  echo "Private repo or auth required. Do one of:" >&2
+  echo "  export GITHUB_TOKEN=...   # or GH_TOKEN (repo read access)" >&2
+  echo "  gh auth login -h github.com" >&2
+  echo "  REPO_URL=git@github.com:Sci-Studio/mesh-studio.api.git $0 (SSH key)" >&2
+}
+
+LS_REMOTE_OUT=""
+if ! LS_REMOTE_OUT=$(git "${GIT_AUTH[@]}" ls-remote --symref "$REPO_URL" HEAD 2>&1); then
+  echo "Failed to read remote refs for: $ORIGINAL_REPO_URL" >&2
+  echo "$LS_REMOTE_OUT" >&2
+  auth_hint
+  exit 1
+fi
+
+DEFAULT_REF=$(echo "$LS_REMOTE_OUT" | awk '/^ref:/ { sub("refs/heads/", "", $2); print $2; exit }')
 if [ -z "$DEFAULT_REF" ]; then
-  echo "Failed to resolve default branch for repository: $ORIGINAL_REPO_URL" >&2
-  echo "If this is a private repository, set GITHUB_TOKEN or use an SSH REPO_URL." >&2
+  echo "Could not determine default branch for: $ORIGINAL_REPO_URL" >&2
+  echo "$LS_REMOTE_OUT" >&2
+  auth_hint
   exit 1
 fi
 
@@ -25,12 +53,20 @@ REF="${REF:-$DEFAULT_REF}"
 mkdir -p "$(dirname "$DEST_DIR")"
 
 if [ ! -d "$DEST_DIR/.git" ]; then
-  git clone --filter=blob:none --no-checkout "$REPO_URL" "$DEST_DIR"
+  if ! git "${GIT_AUTH[@]}" clone --filter=blob:none --no-checkout "$REPO_URL" "$DEST_DIR"; then
+    echo "git clone failed." >&2
+    auth_hint
+    exit 1
+  fi
 fi
 
 git -C "$DEST_DIR" sparse-checkout init --no-cone
 git -C "$DEST_DIR" sparse-checkout set "/$SPARSE_PATH/"
-git -C "$DEST_DIR" fetch --depth 1 origin "$REF"
+if ! git "${GIT_AUTH[@]}" -C "$DEST_DIR" fetch --depth 1 origin "$REF"; then
+  echo "git fetch failed." >&2
+  auth_hint
+  exit 1
+fi
 git -C "$DEST_DIR" checkout --detach FETCH_HEAD
 
 echo "Fetched '$SPARSE_PATH' from '$ORIGINAL_REPO_URL' (ref: $REF) into '$DEST_DIR'."
