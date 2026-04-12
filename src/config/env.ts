@@ -10,6 +10,10 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
+  STORAGE_SERVICE: z.enum(['azure']).default('azure'),
+  AZURE_BLOB_CONNECTION_STRING: z.string().min(1),
+  AZURE_BLOB_CONTAINER: z.string().default('mesh-studio'),
+  AZURE_BLOB_PREFIX: z.string().default('cad-files'),
   MESSAGE_BROKER_SERVICE: z.enum(['azure']).default('azure'),
   AZURE_SERVICE_BUS_CONNECTION_STRING: z.string().min(1),
   AZURE_SERVICE_BUS_QUEUE_NAME: z.string().min(1).default('mesh-jobs'),
