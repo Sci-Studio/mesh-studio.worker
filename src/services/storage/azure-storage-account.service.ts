@@ -1,4 +1,6 @@
 /// <reference types="multer" />
+import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 
 import type { Express } from 'express';
@@ -6,7 +8,11 @@ import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import { PostSaveResponse } from '@generated/types.gen.js';
 
 import { env } from '../../config/env.js';
-import { StorageService } from './storage.service.js';
+import {
+  DownloadedBlob,
+  StorageService,
+  TempBlobDownload,
+} from './storage.service.js';
 
 interface blobFile {
   blob: Blob;
@@ -29,6 +35,37 @@ export class AzureStorageAccountService implements StorageService {
 
   private normalizePrefix(prefix: string): string {
     return prefix.replace(/^\/+|\/+$/g, '');
+  }
+
+  private normalizeBlobName(blobName: string): string {
+    return blobName.replace(/^\/+/, '');
+  }
+
+  async downloadFile(blobName: string): Promise<DownloadedBlob> {
+    const name = this.normalizeBlobName(blobName);
+    const blockBlobClient = this.containerClient.getBlockBlobClient(name);
+    const props = await blockBlobClient.getProperties();
+    const buffer = await blockBlobClient.downloadToBuffer();
+
+    return {
+      buffer,
+      contentType: props.contentType,
+      blobName: name,
+    };
+  }
+
+  async downloadFileToTemp(blobName: string): Promise<TempBlobDownload> {
+    const { buffer, blobName: resolvedName } = await this.downloadFile(blobName);
+    const base = path.basename(resolvedName) || 'input';
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'mesh-worker-'));
+    const filePath = path.join(tmpDir, base);
+    await fs.writeFile(filePath, buffer);
+
+    const cleanup = async () => {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    };
+
+    return { path: filePath, cleanup };
   }
 
   async uploadFile(file: File | Express.Multer.File): Promise<PostSaveResponse> {
