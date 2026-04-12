@@ -3,6 +3,8 @@
     "openapi:fetch": "bash ./src/tools/fetch-api.sh",
     "openapi:fetch:verbose": "bash -x ./src/tools/fetch-api.sh",
     "openapi:generate": "npm run openapi:fetch && openapi-ts -f openapi-ts.config.ts",
+    "prisma:fetch": "bash ./src/tools/fetch-api.sh",
+    "prisma:generate": "npm run prisma:fetch && bash ./src/tools/prisma-generate.sh",
     "openapi:lint": "spectral lint .cache/mesh-studio.api/openapi/ms/openapi.yaml",
     "openapi:watch": "openapi-ts -f openapi-ts.config.ts -w"
   },
@@ -21,6 +23,7 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.1.0",
     "@types/node": "^25.5.2",
+    "prisma": "^7.6.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }

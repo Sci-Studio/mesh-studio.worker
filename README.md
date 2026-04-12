@@ -2,9 +2,37 @@
 
 Worker service for Mesh Studio (Azure Container Jobs and related integrations).
 
+## Fetching from mesh-studio.api (OpenAPI + Prisma)
+
+Scripts such as `npm run openapi:fetch` or `npm run prisma:fetch` clone [mesh-studio.api](https://github.com/Sci-Studio/mesh-studio.api) into `.cache/mesh-studio.api` with a **sparse checkout** of **`openapi/`** and **`prisma/`** by default. If that repository is private, Git must authenticate.
+
+Override checked-out paths with `SPARSE_PATHS` (space-separated), e.g. `SPARSE_PATHS="openapi prisma"` (default).
+
+## Prisma client (generate only; no migrations here)
+
+After fetching, generate the Prisma client from the API schema (this worker does **not** run migrations):
+
+```bash
+npm run prisma:generate
+```
+
+What this does:
+
+1. Copies the cached API schema to **`prisma/schema.prisma`** in this repo (ignored by git).
+2. Patches the `generator client` block so **`output`** is **`../src/generated-prisma`** (relative to `prisma/schema.prisma`), i.e. generated code lives under **`src/generated-prisma/`** in this project—not under `.cache`.
+3. Runs `prisma generate` against that local schema.
+
+Import the client in application code (path alias in `tsconfig.json`):
+
+```ts
+import { PrismaClient } from '@prisma-db';
+```
+
+The default source schema is `.cache/mesh-studio.api/prisma/schema.prisma`. If your API repo uses a different layout, set **`PRISMA_SCHEMA_PATH`** and adjust **`SPARSE_PATHS`** so the file is present under `.cache/` before generate.
+
 ## Fetching the OpenAPI spec (private GitHub repository)
 
-Scripts such as `npm run openapi:fetch` clone [mesh-studio.api](https://github.com/Sci-Studio/mesh-studio.api) with a **sparse checkout** of the `openapi/` directory. If that repository is private, Git must authenticate.
+Use the same authentication steps below for any fetch.
 
 ### Option A: GitHub CLI (recommended)
 
@@ -56,6 +84,8 @@ REPO_URL=git@github.com:Sci-Studio/mesh-studio.api.git npm run openapi:fetch
 
 | Script | Purpose |
 |--------|---------|
-| `npm run openapi:fetch` | Sparse-clone OpenAPI files into `.cache/mesh-studio.api` |
-| `npm run openapi:generate` | Fetch spec, then run `@hey-api/openapi-ts` |
+| `npm run openapi:fetch` | Sparse-clone `openapi/` + `prisma/` into `.cache/mesh-studio.api` |
+| `npm run openapi:generate` | Fetch, then run `@hey-api/openapi-ts` |
+| `npm run prisma:fetch` | Same fetch as above (alias) |
+| `npm run prisma:generate` | Fetch, then `prisma generate` from cached API schema |
 | `npm run openapi:lint` | Lint the bundled OpenAPI file with Spectral |

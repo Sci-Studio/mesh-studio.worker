@@ -20,3 +20,7 @@ coverage/
 
 # Generated
 src/generated/
+src/generated-prisma/
+
+# Copied from mesh-studio.api during prisma:generate (output pinned to src/generated-prisma)
+prisma/schema.prisma

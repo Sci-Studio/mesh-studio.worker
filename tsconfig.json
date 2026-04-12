@@ -5,7 +5,8 @@
         "baseUrl": ".",
         "paths": {
             "@generated": ["src/generated/index.ts"],
-            "@generated/*": ["src/generated/*"]
+            "@generated/*": ["src/generated/*"],
+            "@prisma-db": ["src/generated-prisma/client"]
         },
         "esModuleInterop": true,
     },
