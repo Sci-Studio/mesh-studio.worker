@@ -1,12 +1,8 @@
+/// <reference types="multer" />
+import type { Express } from 'express';
+
 import { PostSaveResponse } from '@generated/types.gen.js';
 
-export interface UploadFileInput {
-  fileName: string;
-  file: Blob;
-  contentType: string;
-}
-
 export interface StorageService {
-  uploadFile(uploadRequest: UploadFileInput): Promise<PostSaveResponse>;
-
+  uploadFile(file: File | Express.Multer.File): Promise<PostSaveResponse>;
 }

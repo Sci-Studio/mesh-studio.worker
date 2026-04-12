@@ -16,6 +16,8 @@
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.95.0",
     "@stoplight/spectral-cli": "^6.15.0",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
     "@types/node": "^25.5.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
