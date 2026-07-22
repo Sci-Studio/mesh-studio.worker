@@ -14,9 +14,9 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(
 );
 const containerClient = blobServiceClient.getContainerClient(env.AZURE_BLOB_CONTAINER);
 
-async function processJob(jobId: string, _payload: unknown): Promise<string> {
+async function processJob(jobId: string, payload: any): Promise<string> {
   console.log(`[worker] Processing job ${jobId}`);
-
+  const userId = String(payload?.userId);
   const outputBlobPath = `results/${jobId}/hello-world.txt`;
   const blob = containerClient.getBlockBlobClient(outputBlobPath);
   await blob.uploadData(Buffer.from('Hello World'), {
