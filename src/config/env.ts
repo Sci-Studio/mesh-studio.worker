@@ -17,6 +17,7 @@ const envSchema = z.object({
   MESSAGE_BROKER_SERVICE: z.enum(['azure']).default('azure'),
   AZURE_SERVICE_BUS_CONNECTION_STRING: z.string().min(1),
   AZURE_SERVICE_BUS_QUEUE_NAME: z.string().min(1).default('mesh-jobs'),
+  AZURE_SERVICE_BUS_RESULTS_QUEUE_NAME: z.string().min(1).default('mesh-jobs-results'),
   PUBSUB_SERVICE: z.enum(['azure']).default('azure'),
   AZURE_WEBPUBSUB_CONNECTION_STRING: z.string().min(1),
   AZURE_WEBPUBSUB_HUB: z.string().min(1).default('mesh-jobs'),

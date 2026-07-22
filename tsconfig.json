@@ -3,6 +3,7 @@
         "rootDir": "src",
         "outDir": "dist",
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "paths": {
             "@generated": ["src/generated/index.ts"],
             "@generated/*": ["src/generated/*"]
