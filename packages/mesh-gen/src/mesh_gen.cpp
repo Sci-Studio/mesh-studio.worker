@@ -6,9 +6,8 @@
 
 namespace mesh_gen {
 
-int write_mesh_to_file() {
+int write_mesh_to_file(const char* output_path) {
 
-  std::string output_path = "mesh.node";
   std::ofstream out(output_path, std::ios::binary | std::ios::trunc);
   if (!out) {
     std::cerr << "mesh_gen::write_mesh_to_file: failed to create file '" << output_path << "' for writing\n";

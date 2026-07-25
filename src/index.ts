@@ -1,7 +1,11 @@
 import { ServiceBusClient, ServiceBusReceivedMessage } from '@azure/service-bus';
 import { BlobServiceClient } from '@azure/storage-blob';
-
+import { execFile } from 'node:child_process';
+import { promisify} from 'node:util';
 import { env } from './config/env.js';
+import os from 'node:os';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 
 const jobsQueue = env.AZURE_SERVICE_BUS_QUEUE_NAME;
 const resultsQueue = env.AZURE_SERVICE_BUS_RESULTS_QUEUE_NAME;
@@ -14,16 +18,35 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(
 );
 const containerClient = blobServiceClient.getContainerClient(env.AZURE_BLOB_CONTAINER);
 
-async function processJob(jobId: string, payload: any): Promise<string> {
-  console.log(`[worker] Processing job ${jobId}`);
-  const userId = String(payload?.userId);
-  const outputBlobPath = `${userId}/results/${jobId}/hello-world.txt`;
-  const blob = containerClient.getBlockBlobClient(outputBlobPath);
-  await blob.uploadData(Buffer.from('Hello World'), {
-    blobHTTPHeaders: { blobContentType: 'text/plain' },
-  });
+const execFileAsync = promisify(execFile);
+const MESH_GEN_BIN = './packages/mesh-gen/build/mesh-gen';
 
-  return outputBlobPath;
+async function processJob(jobId: string, payload: any): Promise<string> {
+  
+  const userId = String(payload?.userId);
+  const outputBlobPath = `${userId}/results/${jobId}/mesh.out`;
+
+
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'mesh-gen'));
+  const localOutput = path.join(tmpDir, 'mesh.node');
+
+
+  try {
+
+    await execFileAsync(MESH_GEN_BIN, [localOutput], {});
+
+    const data = await fs.readFile(localOutput);
+    const blob = containerClient.getBlockBlobClient(outputBlobPath);
+    await blob.uploadData(data, {
+      blobHTTPHeaders: { blobContentType: 'application/octet-stream' },
+    });
+    
+    return outputBlobPath;
+
+  } finally {
+    await fs.rm(tmpDir, { recursive: true, force: true })
+  }
+  
 }
 
 function resolveJobId(message: ServiceBusReceivedMessage): string {
