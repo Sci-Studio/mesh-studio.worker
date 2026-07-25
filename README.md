@@ -59,3 +59,10 @@ REPO_URL=git@github.com:Sci-Studio/mesh-studio.api.git npm run openapi:fetch
 | `npm run openapi:fetch` | Sparse-clone OpenAPI files into `.cache/mesh-studio.api` |
 | `npm run openapi:generate` | Fetch spec, then run `@hey-api/openapi-ts` |
 | `npm run openapi:lint` | Lint the bundled OpenAPI file with Spectral |
+
+## To Build and push image to container registry
+
+# From the worker project root
+az acr login --name meshengineregistry
+docker build -t meshengineregistry.azurecr.io/mesh-worker:latest .
+docker push meshengineregistry.azurecr.io/mesh-worker:latest
