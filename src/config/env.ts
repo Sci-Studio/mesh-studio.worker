@@ -15,6 +15,7 @@ const envSchema = z.object({
   AZURE_SERVICE_BUS_CONNECTION_STRING: z.string().min(1),
   AZURE_SERVICE_BUS_QUEUE_NAME: z.string().min(1).default('mesh-jobs'),
   AZURE_SERVICE_BUS_RESULTS_QUEUE_NAME: z.string().min(1).default('mesh-jobs-results'),
+  MESH_GEN_BIN: z.string().min(1),
 });
 
 const parsed = envSchema.safeParse(process.env);

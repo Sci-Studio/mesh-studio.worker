@@ -19,7 +19,7 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(
 const containerClient = blobServiceClient.getContainerClient(env.AZURE_BLOB_CONTAINER);
 
 const execFileAsync = promisify(execFile);
-const MESH_GEN_BIN = './packages/mesh-gen/build/mesh-gen';
+const MESH_GEN_BIN = env.MESH_GEN_BIN ?? '/bin/mesh-gen';
 
 async function processJob(jobId: string, payload: any): Promise<string> {
   
