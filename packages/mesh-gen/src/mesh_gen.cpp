@@ -1,10 +1,10 @@
-#include "mesh_gen/mesh_gen.h"
-
+#include "mesh_gen.h"
+#include "data_structures.h"
+#include "io.h"
 #include <fstream>
 #include <iostream>
 #include <string>
 
-namespace mesh_gen {
 
 int write_mesh_to_file(const char* output_path) {
 
@@ -29,4 +29,15 @@ int write_mesh_to_file(const char* output_path) {
   return 0;
 }
 
+int generate_mesh(const char* input_path) {
+
+  Mesh mesh;
+
+  if(!load_mesh(input_path, mesh)) {
+    std::cerr << "Failed to load mesh from " << input_path << std::endl;
+    return 1;
+  }
+
+  return 0;
 }
+

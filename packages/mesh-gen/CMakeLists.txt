@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Shared library -> libMeshGen.so
 add_library(MeshGen SHARED
   src/mesh_gen.cpp
+  src/io.cpp
 )
 
 target_include_directories(MeshGen
