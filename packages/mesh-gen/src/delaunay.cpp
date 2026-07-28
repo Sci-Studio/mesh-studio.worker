@@ -15,6 +15,12 @@ Triangle make_tri(int a, int b, int c) {
     return t;
 }
 
+typedef std::pair<int, int> EdgeKey;
+
+EdgeKey undirected_edge(int a, int b) {
+    return (a < b) ? EdgeKey{a, b} : EdgeKey{b, a};
+}
+
 bool triangulate(Mesh& mesh) {
     mesh.triangles.clear();
 
@@ -76,7 +82,22 @@ bool triangulate(Mesh& mesh) {
             }
         }
 
-        //
+        // Count undirected edges among bad triangles; boundary = count == 1
+        std::map<EdgeKey, int> edge_count;
+        std::map<EdgeKey, EdgeKey> directed;  // store one directed (a->b) for orientation
+       
+        for (size_t bi = 0; bi < bad.size(); ++bi) {
+            const Triangle& t = mesh.triangles[bad[bi]];
+            const int verts[3] = {t.v[0], t.v[1], t.v[2]};
+            for (int e = 0; e < 3; ++e) {
+                const int a = verts[e];
+                const int b = verts[(e + 1) % 3];
+                const EdgeKey key = undirected_edge(a, b);
+                edge_count[key] += 1;
+                directed[key] = EdgeKey(a, b);  // CCW edge from the bad triangle
+            }
+        }
+
     }
 
     return true;
