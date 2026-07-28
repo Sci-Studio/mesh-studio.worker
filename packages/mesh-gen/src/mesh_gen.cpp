@@ -1,6 +1,7 @@
 #include "mesh_gen.h"
 #include "data_structures.h"
 #include "io.h"
+#include "delaunay.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -36,6 +37,14 @@ int generate_mesh(const char* input_path) {
   if(!load_mesh(input_path, mesh)) {
     std::cerr << "Failed to load mesh from " << input_path << std::endl;
     return 1;
+  }
+
+  std::cout << "Loaded " << mesh.points.size() << " points from " << input_path
+            << "\n";
+
+  if (!triangulate(mesh)) {
+    std::cerr << "triangulate failed\n";
+    return 2;
   }
 
   return 0;

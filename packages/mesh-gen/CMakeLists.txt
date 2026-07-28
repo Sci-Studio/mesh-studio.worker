@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(MeshGen SHARED
   src/mesh_gen.cpp
   src/io.cpp
+  src/delaunay.cpp
 )
 
 target_include_directories(MeshGen
