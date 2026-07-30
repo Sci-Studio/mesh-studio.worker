@@ -24,6 +24,8 @@ set_target_properties(MeshGen PROPERTIES
   OUTPUT_NAME MeshGen
 )
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # CLI executable that links against the shared library
 add_executable(mesh-gen src/main.cpp)
 target_link_libraries(mesh-gen PRIVATE MeshGen)
