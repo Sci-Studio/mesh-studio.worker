@@ -2,6 +2,8 @@
 #include "data_structures.h"
 #include "io.h"
 #include "delaunay.h"
+#include "mesh2d.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -33,6 +35,7 @@ int write_mesh_to_file(const char* output_path) {
 int generate_mesh(const char* input_path) {
 
   Mesh mesh;
+  const char* svg_path = "delaunay.svg";
 
   if(!load_mesh(input_path, mesh)) {
     std::cerr << "Failed to load mesh from " << input_path << std::endl;
@@ -46,6 +49,30 @@ int generate_mesh(const char* input_path) {
     std::cerr << "triangulate failed\n";
     return 2;
   }
+
+  std::cout << "Triangles: " << mesh.triangles.size() << "\n";
+  for (size_t i = 0; i < mesh.triangles.size(); ++i) {
+    const Triangle& t = mesh.triangles[i];
+    std::cout << "  [" << i << "] (" << t.v[0] << ", " << t.v[1] << ", "
+              << t.v[2] << ")\n";
+  }
+
+  if (!all_triangles_ccw(mesh)) {
+    std::cerr << "Validation failed: not all triangles are CCW\n";
+    return 3;
+  }
+  if (!is_delaunay(mesh)) {
+    std::cerr << "Validation failed: not Delaunay\n";
+    return 4;
+  }
+
+  std::cout << "Validation OK (CCW + Delaunay)\n";
+
+  if (!write_svg(mesh, svg_path)) {
+    std::cerr << "Failed to write SVG: " << svg_path << "\n";
+    return 5;
+  }
+  std::cout << "Wrote " << svg_path << "\n";
 
   return 0;
 }
