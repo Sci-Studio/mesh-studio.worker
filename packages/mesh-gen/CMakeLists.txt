@@ -9,6 +9,7 @@ add_library(MeshGen SHARED
   src/mesh_gen.cpp
   src/io.cpp
   src/delaunay.cpp
+  src/predicates.cpp
 )
 
 target_include_directories(MeshGen

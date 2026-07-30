@@ -1,7 +1,10 @@
 #include "delaunay.h"
 #include "data_structures.h"
+#include "predicates.h"
 
+#include <map>
 #include <iostream>
+#include <algorithm>
 
 Triangle make_tri(int a, int b, int c) {
     Triangle t;
@@ -71,7 +74,7 @@ bool triangulate(Mesh& mesh) {
         std::vector<int> bad;
         bad.reserve(mesh.triangles.size());
 
-        for (int ti = 0; ti < static_cast<int>mesh.triangles.size(), ++i) {
+        for (int ti = 0; ti < static_cast<int>(mesh.triangles.size()); ++ti) {
             const Triangle& t = mesh.triangles[ti];
             const Vec2& a = mesh.points[t.v[0]];
             const Vec2& b = mesh.points[t.v[1]];
@@ -98,7 +101,49 @@ bool triangulate(Mesh& mesh) {
             }
         }
 
+        std::vector<EdgeKey> boundary;
+        for(std::map<EdgeKey, int>::const_iterator it = edge_count.begin(); it != edge_count.end(); ++it) {
+            if (it->second == 1) {
+                boundary.push_back(directed[it->first]);
+            }
+        }
+
+        std::sort(bad.begin(), bad.end());
+        for(int i = static_cast<int>(bad.size()) - 1; i >= 0; --i) {
+            mesh.triangles.erase(mesh.triangles.begin() + bad[i]);
+        }
+
+        // connect p to each boundary edge
+      
+        for (size_t ei = 0; ei < boundary.size(); ++ei) {
+            int a = boundary[ei].first;
+            int b = boundary[ei].second;
+            // Ensure (a,b,p) is CCW
+            if (orient2d(mesh.points[a], mesh.points[b], p) <= 0.0) {
+              const int tmp = a;
+              a = b;
+              b = tmp;
+            }
+            mesh.triangles.push_back(make_tri(a, b, pi));
+        }
     }
 
-    return true;
+     // Remove triangles that touch any super-triangle vertex
+    {
+      std::vector<Triangle> kept;
+      kept.reserve(mesh.triangles.size());
+      for (size_t i = 0; i < mesh.triangles.size(); ++i) {
+        const Triangle& t = mesh.triangles[i];
+        if (t.v[0] >= n || t.v[1] >= n || t.v[2] >= n) {
+          continue;
+        }
+        kept.push_back(t);
+      }
+      mesh.triangles.swap(kept);
+    }
+
+    // Drop super-triangle vertices (indices >= n are unused)
+    mesh.points.resize(n);
+
+    return !mesh.triangles.empty();
 }
