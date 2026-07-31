@@ -4,6 +4,17 @@ project(MeshGen)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        v1.14.0 
+) 
+
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
 # Shared library -> libMeshGen.so
 add_library(MeshGen SHARED
   src/mesh_gen.cpp
@@ -11,6 +22,7 @@ add_library(MeshGen SHARED
   src/delaunay.cpp
   src/predicates.cpp
   src/mesh2d.cpp
+  src/utils.cpp
 )
 
 target_include_directories(MeshGen
@@ -28,4 +40,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CLI executable that links against the shared library
 add_executable(mesh-gen src/main.cpp)
+add_executable(meshgen_tests tests/test_utils.cpp)
+
 target_link_libraries(mesh-gen PRIVATE MeshGen)
+target_link_libraries(meshgen_tests
+  PRIVATE
+    MeshGen
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(meshgen_tests)
