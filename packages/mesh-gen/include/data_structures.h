@@ -2,13 +2,15 @@
 
 #include <vector>
 
+const unsigned int COMPLEX_NO_VERTICES = 3;
+
 struct Vec2 {
     double x, y;
 };
 
 struct Triangle {
-    int v[3];
-    int neigh[3];
+    int v[COMPLEX_NO_VERTICES];
+    int neigh[COMPLEX_NO_VERTICES];
 };
 
 struct Mesh {

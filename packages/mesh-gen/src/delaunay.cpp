@@ -29,7 +29,7 @@ bool triangulate(Mesh& mesh) {
     mesh.triangles.clear();
 
     const int n = static_cast<int>(mesh.points.size());
-    if (n < 3) {
+    if (n < COMPLEX_NO_VERTICES) {
         return false;
     }
 
@@ -81,10 +81,10 @@ bool triangulate(Mesh& mesh) {
        
         for (size_t bi = 0; bi < bad.size(); ++bi) {
             const Triangle& t = mesh.triangles[bad[bi]];
-            const int verts[3] = {t.v[0], t.v[1], t.v[2]};
-            for (int e = 0; e < 3; ++e) {
+            const int verts[COMPLEX_NO_VERTICES] = {t.v[0], t.v[1], t.v[2]};
+            for (int e = 0; e < COMPLEX_NO_VERTICES; ++e) {
                 const int a = verts[e];
-                const int b = verts[(e + 1) % 3];
+                const int b = verts[(e + 1) % COMPLEX_NO_VERTICES];
                 const EdgeKey key = undirected_edge(a, b);
                 edge_count[key] += 1;
                 directed[key] = EdgeKey(a, b);  // CCW edge from the bad triangle
