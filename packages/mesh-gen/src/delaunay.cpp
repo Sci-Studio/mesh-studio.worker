@@ -1,6 +1,7 @@
 #include "delaunay.h"
 #include "data_structures.h"
 #include "predicates.h"
+#include "utils.h"
 
 #include <map>
 #include <iostream>
@@ -32,24 +33,13 @@ bool triangulate(Mesh& mesh) {
         return false;
     }
 
-    double min_x = mesh.points[0].x;
-    double min_y = mesh.points[0].y;
-    double max_x = min_x;
-    double max_y = min_y;
+    BBox box = bounding_box(mesh.points);
 
-    for (int i = 1; i < n; ++i) {
-        const Vec2& p = mesh.points[i];
-        if (p.x < min_x) min_x = p.x;
-        if (p.y < min_y) min_y = p.y;
-        if (p.x > max_x) max_x = p.x;
-        if (p.y > max_y) max_y = p.y;
-    }
-
-    const double dx = max_x - min_x;
-    const double dy = max_y - min_y;
+    const double dx = box.max_x - box.min_x;
+    const double dy = box.max_y - box.min_y;
     const double delta = std::max(dx, dy);
-    const double mid_x = 0.5 * (min_x + max_x);
-    const double mid_y = 0.5 * (min_y + max_y);
+    const double mid_x = 0.5 * (box.min_x + box.max_x);
+    const double mid_y = 0.5 * (box.min_y + box.max_y);
 
     const double m = (delta > 0.0) ? (20.0 * delta) : 20.0;
     
