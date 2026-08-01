@@ -1,4 +1,4 @@
-#include "mesh_gen/mesh_gen.h"
+#include "mesh_gen.h"
 
 #include <iostream>
 
@@ -8,5 +8,5 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  return mesh_gen::write_mesh_to_file(argv[1]);
+  return generate_mesh(argv[1]);
 }
