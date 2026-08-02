@@ -1,4 +1,5 @@
 #include "parser/dxf_parser.h"
+#include "parser/dxf_codes.h"
 
 #include <fstream>
 #include <algorithm>
@@ -23,7 +24,7 @@ bool add_unique(std::vector<Vec2>& points, const Vec2& p) {
     return false;
 }
 
-bool read_pair(std::istream& in, int& code, std::string& value) {
+bool read_pair(std::istream& in, DXF::GROUP_CODE& code, std::string& value) {
 
     std::string line;
     std::istringstream iss;
@@ -44,7 +45,7 @@ bool read_pair(std::istream& in, int& code, std::string& value) {
     return true;
 }
 
-void parse_line(std::istream& in, Mesh& mesh, int& code, std::string& value) {
+void parse_line(std::istream& in, Mesh& mesh, DXF::GROUP_CODE& code, std::string& value) {
 
     Vec2 start;
     Vec2 end;
@@ -52,13 +53,13 @@ void parse_line(std::istream& in, Mesh& mesh, int& code, std::string& value) {
     end.x = end.y = 0.0;
     
     while(read_pair(in, code, value) && code != 0) {
-        if (code == 10) {
+        if (code == DXF::START_X) {
             start.x = std::atof(value.c_str());
-        } else if (code == 20) {
+        } else if (code == DXF::START_Y) {
             start.y = std::atof(value.c_str());
-        } else if (code == 11) {
+        } else if (code == DXF::END_X) {
             end.x = std::atof(value.c_str());
-        } else if (code == 21) {
+        } else if (code == DXF::END_Y) {
             end.y = std::atof(value.c_str());
         }
     }
@@ -68,10 +69,10 @@ void parse_line(std::istream& in, Mesh& mesh, int& code, std::string& value) {
 
 }
 
-void parse_entites(std::istream& in, Mesh& mesh, int& code, std::string& value) {
+void parse_entites(std::istream& in, Mesh& mesh, DXF::GROUP_CODE& code, std::string& value) {
 
-    while(code == 0 && value != "ENDSEC") {
-        if (code == 0 && value == "LINE") {
+    while(code == DXF::ENTITY_TYPE && value != DXF::ENDSEC) {
+        if (code == DXF::ENTITY_TYPE && value == DXF::LINE) {
             parse_line(in, mesh, code, value);
             continue;
         }
@@ -91,12 +92,12 @@ bool load_dxf(const char* path, Mesh& mesh) {
     std::string line;
     std::string value;
     std::istringstream iss;
-    int code = 0;
+    DXF::GROUP_CODE code = 0;
 
 
     while(read_pair(in, code, value)) {
 
-        if(code == 2 && value == "ENTITIES") {
+        if(code == DXF::NAME && value == DXF::ENTITIES) {
             read_pair(in, code, value);
             parse_entites(in, mesh, code, value);
             break;
