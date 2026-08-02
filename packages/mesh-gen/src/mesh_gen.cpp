@@ -1,7 +1,7 @@
 #include "mesh_gen.h"
 #include "data_structures.h"
 #include "io.h"
-#include "parser/dfx_parser.h"
+#include "parser/dxf_parser.h"
 #include "delaunay.h"
 #include "mesh2d.h"
 
@@ -38,7 +38,7 @@ int generate_mesh(const char* input_path) {
   Mesh mesh;
   const char* svg_path = "delaunay.svg";
 
-  if(!load_dfx(input_path, mesh)) {
+  if(!load_dxf(input_path, mesh)) {
     std::cerr << "Failed to load mesh from " << input_path << std::endl;
     return 1;
   }

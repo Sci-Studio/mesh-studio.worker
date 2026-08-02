@@ -2,14 +2,14 @@
 #include <algorithm>
 #include <iostream>
 #include "data_structures.h"
-#include "parser/dfx_parser.h"
+#include "parser/dxf_parser.h"
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;
 
     const char* dfx_path = "../data/rectangle-prism-Shape2DView.dxf";
     
-    bool is_loaded = load_dfx(dfx_path, mesh);
+    bool is_loaded = load_dxf(dfx_path, mesh);
 
     ASSERT_TRUE(is_loaded);
     ASSERT_FALSE(mesh.points.empty());
@@ -35,12 +35,6 @@ TEST(ParseDFXFile, ReturnsPointsInDfx) {
       });
 
     
-    for (const Vec2& point : mesh.points)
-    {
-        std::cout << "Hello world " << '('
-                  << point.x << ", "
-                  << point.y << ")\n";
-    }
     EXPECT_NE(p0_it, mesh.points.end());
     EXPECT_NE(p1_it, mesh.points.end());
 

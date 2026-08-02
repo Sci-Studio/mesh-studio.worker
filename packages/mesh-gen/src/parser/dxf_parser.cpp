@@ -1,4 +1,4 @@
-#include "parser/dfx_parser.h"
+#include "parser/dxf_parser.h"
 
 #include <fstream>
 #include <algorithm>
@@ -78,7 +78,7 @@ void parse_entites(std::istream& in, Mesh& mesh, int& code, std::string& value) 
     }
 }
 
-bool load_dfx(const char* path, Mesh& mesh) {
+bool load_dxf(const char* path, Mesh& mesh) {
     mesh.points.clear();
     mesh.triangles.clear();
 

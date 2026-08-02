@@ -23,7 +23,7 @@ add_library(MeshGen SHARED
   src/predicates.cpp
   src/mesh2d.cpp
   src/utils.cpp
-  src/parser/dfx_parser.cpp
+  src/parser/dxf_parser.cpp
 )
 
 target_include_directories(MeshGen
@@ -40,13 +40,13 @@ set_target_properties(MeshGen PROPERTIES
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CLI executable that links against the shared library
-add_executable(mesh-gen src/main.cpp)
+add_executable(meshgen src/main.cpp)
 add_executable(meshgen_tests
   tests/test_utils.cpp
-  tests/test_dfx_parser.cpp
+  tests/test_dxf_parser.cpp
 )
 
-target_link_libraries(mesh-gen PRIVATE MeshGen)
+target_link_libraries(meshgen PRIVATE MeshGen)
 target_link_libraries(meshgen_tests
   PRIVATE
     MeshGen
