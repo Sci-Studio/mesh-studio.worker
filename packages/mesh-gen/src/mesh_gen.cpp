@@ -1,5 +1,5 @@
 #include "mesh_gen.h"
-#include "data_structures.h"
+#include "DataStructures.hpp"
 #include "io.h"
 #include "parser/DxfParser.hpp"
 #include "delaunay.h"

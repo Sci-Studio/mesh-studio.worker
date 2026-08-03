@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <iostream>
-#include "data_structures.h"
+#include "DataStructures.hpp"
 #include "parser/DxfParser.hpp"
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {

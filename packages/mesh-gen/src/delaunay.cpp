@@ -1,5 +1,5 @@
 #include "delaunay.h"
-#include "data_structures.h"
+#include "DataStructures.hpp"
 #include "predicates.h"
 #include "utils.h"
 

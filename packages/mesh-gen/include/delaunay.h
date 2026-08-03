@@ -1,5 +1,5 @@
 #pragma once
 
-#include "data_structures.h"
+#include "DataStructures.hpp"
 
 bool triangulate(Mesh& mesh);
