@@ -6,7 +6,7 @@
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;
-    DXF::DxfParser parser;
+    dxf::DxfParser parser;
 
     const char* dfx_path = "../data/rectangle-prism-Shape2DView.dxf";
     
