@@ -13,3 +13,5 @@ CheckOptions:
       value: CamelCase
     - key: readability-identifier-naming.FunctionCase
       value: camelBack
+    - key: readability-identifier-naming.NamespaceCase
+      value: lower_case

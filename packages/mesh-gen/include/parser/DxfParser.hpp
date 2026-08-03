@@ -5,7 +5,7 @@
 
 #include <fstream>
 
-namespace DXF {
+namespace dxf {
 
     class DxfParser {
 
@@ -14,8 +14,8 @@ namespace DXF {
         
         private:
             bool addUnique(std::vector<Vec2>& points, const Vec2& point);
-            bool readPair(std::istream& inputFile, DXF::GROUP_CODE& code, std::string& value);
-            void parseLine(std::istream& inputFile, Mesh& mesh, DXF::GROUP_CODE& code, std::string& value);
-            void parseEntites(std::istream& inputFile, Mesh& mesh, DXF::GROUP_CODE& code, std::string& value);
+            bool readPair(std::istream& inputFile, dxf::GROUP_CODE& code, std::string& value);
+            void parseLine(std::istream& inputFile, Mesh& mesh, dxf::GROUP_CODE& code, std::string& value);
+            void parseEntites(std::istream& inputFile, Mesh& mesh, dxf::GROUP_CODE& code, std::string& value);
     };
 }

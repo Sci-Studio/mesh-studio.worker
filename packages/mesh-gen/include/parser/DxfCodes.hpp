@@ -1,6 +1,6 @@
 #pragma once
 
-namespace DXF {
+namespace dxf {
 
     typedef unsigned int GROUP_CODE;
     typedef const char* ENTITY_NAME; 

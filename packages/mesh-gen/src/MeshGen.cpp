@@ -36,7 +36,7 @@ int writeMeshToFile(const char* output_path) {
 int generateMesh(const char* input_path) {
 
   Mesh mesh;
-  DXF::DxfParser parser;
+  dxf::DxfParser parser;
   const char* svg_path = "delaunay.svg";
 
   if(!parser.loadDxf(input_path, mesh)) {
