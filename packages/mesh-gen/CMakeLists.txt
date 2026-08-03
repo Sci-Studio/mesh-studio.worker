@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(MeshGen)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
@@ -23,6 +23,7 @@ add_library(MeshGen SHARED
   src/predicates.cpp
   src/mesh2d.cpp
   src/utils.cpp
+  src/parser/DxfParser.cpp
 )
 
 target_include_directories(MeshGen
@@ -39,10 +40,13 @@ set_target_properties(MeshGen PROPERTIES
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CLI executable that links against the shared library
-add_executable(mesh-gen src/main.cpp)
-add_executable(meshgen_tests tests/test_utils.cpp)
+add_executable(meshgen src/main.cpp)
+add_executable(meshgen_tests
+  tests/test_utils.cpp
+  tests/test_dxf_parser.cpp
+)
 
-target_link_libraries(mesh-gen PRIVATE MeshGen)
+target_link_libraries(meshgen PRIVATE MeshGen)
 target_link_libraries(meshgen_tests
   PRIVATE
     MeshGen
