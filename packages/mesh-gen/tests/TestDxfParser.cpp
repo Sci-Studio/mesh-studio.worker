@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <iostream>
-#include "data_structures.h"
+#include "DataStructures.hpp"
 #include "parser/DxfParser.hpp"
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;
-    DXF::DxfParser parser;
+    dxf::DxfParser parser;
 
     const char* dfx_path = "../data/rectangle-prism-Shape2DView.dxf";
     

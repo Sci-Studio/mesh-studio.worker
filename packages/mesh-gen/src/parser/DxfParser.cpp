@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-using namespace DXF;
+using namespace dxf;
 
 bool DxfParser::addUnique(std::vector<Vec2>& points, const Vec2& point) {
 
@@ -53,13 +53,13 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
     end.x = end.y = 0.0;
     
     while(readPair(inputFile, code, value) && code != 0) {
-        if (code == DXF::START_X) {
+        if (code == dxf::START_X) {
             start.x = std::atof(value.c_str());
-        } else if (code == DXF::START_Y) {
+        } else if (code == dxf::START_Y) {
             start.y = std::atof(value.c_str());
-        } else if (code == DXF::END_X) {
+        } else if (code == dxf::END_X) {
             end.x = std::atof(value.c_str());
-        } else if (code == DXF::END_Y) {
+        } else if (code == dxf::END_Y) {
             end.y = std::atof(value.c_str());
         }
     }
@@ -71,8 +71,8 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
 
 void DxfParser::parseEntites(std::istream& in, Mesh& mesh, GROUP_CODE& code, std::string& value) {
 
-    while(code == DXF::ENTITY_TYPE && value != DXF::ENDSEC) {
-        if (code == DXF::ENTITY_TYPE && value == DXF::LINE) {
+    while(code == dxf::ENTITY_TYPE && value != dxf::ENDSEC) {
+        if (code == dxf::ENTITY_TYPE && value == dxf::LINE) {
             parseLine(in, mesh, code, value);
             continue;
         }
@@ -96,7 +96,7 @@ bool DxfParser::loadDxf(const char* path, Mesh& mesh) {
 
     while(readPair(in, code, value)) {
 
-        if(code == DXF::NAME && value == DXF::ENTITIES) {
+        if(code == dxf::NAME && value == dxf::ENTITIES) {
             readPair(in, code, value);
             parseEntites(in, mesh, code, value);
             break;

@@ -1,13 +1,13 @@
-#include "mesh2d.h"
+#include "Mesh2D.hpp"
 
-#include "predicates.h"
+#include "Predicates.hpp"
 
 #include <algorithm>
 #include <fstream>
 
 
 
-bool all_triangles_ccw(const Mesh& mesh) {
+bool allTrianglesCcw(const Mesh& mesh) {
   for (size_t i = 0; i < mesh.triangles.size(); ++i) {
     const Triangle& t = mesh.triangles[i];
     const Vec2& a = mesh.points[t.v[0]];
@@ -20,7 +20,7 @@ bool all_triangles_ccw(const Mesh& mesh) {
   return true;
 }
 
-bool is_delaunay(const Mesh& mesh) {
+bool isDelaunay(const Mesh& mesh) {
   const int n = static_cast<int>(mesh.points.size());
   for (size_t ti = 0; ti < mesh.triangles.size(); ++ti) {
     const Triangle& t = mesh.triangles[ti];
@@ -39,7 +39,7 @@ bool is_delaunay(const Mesh& mesh) {
   return true;
 }
 
-bool write_svg(const Mesh& mesh, const std::string& path) {
+bool writeSvg(const Mesh& mesh, const std::string& path) {
   
   if (mesh.points.empty()) {
     return false;
