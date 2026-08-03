@@ -10,7 +10,7 @@
 #include <string>
 
 
-int write_mesh_to_file(const char* output_path) {
+int writeMeshToFile(const char* output_path) {
 
   std::ofstream out(output_path, std::ios::binary | std::ios::trunc);
   if (!out) {
@@ -33,7 +33,7 @@ int write_mesh_to_file(const char* output_path) {
   return 0;
 }
 
-int generate_mesh(const char* input_path) {
+int generateMesh(const char* input_path) {
 
   Mesh mesh;
   DXF::DxfParser parser;
@@ -59,18 +59,18 @@ int generate_mesh(const char* input_path) {
               << t.v[2] << ")\n";
   }
 
-  if (!all_triangles_ccw(mesh)) {
+  if (!allTrianglesCcw(mesh)) {
     std::cerr << "Validation failed: not all triangles are CCW\n";
     return 3;
   }
-  if (!is_delaunay(mesh)) {
+  if (!isDelaunay(mesh)) {
     std::cerr << "Validation failed: not Delaunay\n";
     return 4;
   }
 
   std::cout << "Validation OK (CCW + Delaunay)\n";
 
-  if (!write_svg(mesh, svg_path)) {
+  if (!writeSvg(mesh, svg_path)) {
     std::cerr << "Failed to write SVG: " << svg_path << "\n";
     return 5;
   }

@@ -33,7 +33,7 @@ bool triangulate(Mesh& mesh) {
         return false;
     }
 
-    BBox box = bounding_box(mesh.points);
+    BoundingBox box = getboundingBox(mesh.points);
 
     const double dx = box.max_x - box.min_x;
     const double dy = box.max_y - box.min_y;

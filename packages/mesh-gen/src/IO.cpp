@@ -5,7 +5,7 @@
 #include <string>
 
 
-bool load_mesh(const char* path, Mesh& mesh) {
+bool loadOff(const char* path, Mesh& mesh) {
 
     mesh.points.clear();
     mesh.triangles.clear();

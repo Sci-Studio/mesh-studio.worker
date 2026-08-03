@@ -8,5 +8,5 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  return generate_mesh(argv[1]);
+  return generateMesh(argv[1]);
 }

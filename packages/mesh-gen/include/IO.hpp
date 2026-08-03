@@ -2,4 +2,4 @@
 
 #include "DataStructures.hpp"
 
-bool load_mesh(const char* path, Mesh& mesh);
+bool loadOff(const char* path, Mesh& mesh);
