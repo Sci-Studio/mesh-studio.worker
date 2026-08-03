@@ -43,7 +43,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(meshgen src/main.cpp)
 add_executable(meshgen_tests
   tests/test_utils.cpp
-  tests/test_dxf_parser.cpp
+  tests/TestDxfParser.cpp
 )
 
 target_link_libraries(meshgen PRIVATE MeshGen)
