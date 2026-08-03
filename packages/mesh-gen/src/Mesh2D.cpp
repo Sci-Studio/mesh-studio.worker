@@ -1,6 +1,6 @@
-#include "mesh2d.h"
+#include "Mesh2D.hpp"
 
-#include "predicates.h"
+#include "Predicates.hpp"
 
 #include <algorithm>
 #include <fstream>

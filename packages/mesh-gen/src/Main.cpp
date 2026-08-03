@@ -1,4 +1,4 @@
-#include "mesh_gen.h"
+#include "MeshGen.hpp"
 
 #include <iostream>
 

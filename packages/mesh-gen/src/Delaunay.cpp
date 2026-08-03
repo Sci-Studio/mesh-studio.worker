@@ -1,7 +1,7 @@
-#include "delaunay.h"
+#include "Delaunay.hpp"
 #include "DataStructures.hpp"
-#include "predicates.h"
-#include "utils.h"
+#include "Predicates.hpp"
+#include "Utils.hpp"
 
 #include <map>
 #include <iostream>

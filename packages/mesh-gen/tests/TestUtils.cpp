@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "utils.h"
+#include "Utils.hpp"
 
 TEST(PointMinMax, ReturnsMinAndMaxX) {
     std::vector<Vec2> points;

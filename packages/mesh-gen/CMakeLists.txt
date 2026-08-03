@@ -17,12 +17,12 @@ enable_testing()
 
 # Shared library -> libMeshGen.so
 add_library(MeshGen SHARED
-  src/mesh_gen.cpp
-  src/io.cpp
-  src/delaunay.cpp
-  src/predicates.cpp
-  src/mesh2d.cpp
-  src/utils.cpp
+  src/MeshGen.cpp
+  src/IO.cpp
+  src/Delaunay.cpp
+  src/Predicates.cpp
+  src/Mesh2D.cpp
+  src/Utils.cpp
   src/parser/DxfParser.cpp
 )
 
@@ -40,9 +40,9 @@ set_target_properties(MeshGen PROPERTIES
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CLI executable that links against the shared library
-add_executable(meshgen src/main.cpp)
+add_executable(meshgen src/Main.cpp)
 add_executable(meshgen_tests
-  tests/test_utils.cpp
+  tests/TestUtils.cpp
   tests/TestDxfParser.cpp
 )
 

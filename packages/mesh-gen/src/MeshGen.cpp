@@ -1,9 +1,9 @@
-#include "mesh_gen.h"
+#include "MeshGen.hpp"
 #include "DataStructures.hpp"
-#include "io.h"
+#include "IO.hpp"
 #include "parser/DxfParser.hpp"
-#include "delaunay.h"
-#include "mesh2d.h"
+#include "Delaunay.hpp"
+#include "Mesh2D.hpp"
 
 #include <fstream>
 #include <iostream>

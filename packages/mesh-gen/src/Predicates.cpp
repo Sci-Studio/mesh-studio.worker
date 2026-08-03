@@ -1,4 +1,4 @@
-#include "predicates.h"
+#include "Predicates.hpp"
 
 double orient2d(const Vec2& a, const Vec2& b, const Vec2& c) {
     // Twice signed area of triangle abc

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../DataStructures.hpp"
+#include "DataStructures.hpp"
 #include "DxfCodes.hpp"
 
 #include <fstream>
