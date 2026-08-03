@@ -23,7 +23,7 @@ add_library(MeshGen SHARED
   src/predicates.cpp
   src/mesh2d.cpp
   src/utils.cpp
-  src/parser/dxf_parser.cpp
+  src/parser/DxfParser.cpp
 )
 
 target_include_directories(MeshGen

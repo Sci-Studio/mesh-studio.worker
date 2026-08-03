@@ -1,5 +1,4 @@
-#include "parser/dxf_parser.h"
-#include "parser/dxf_codes.h"
+#include "parser/DxfParser.hpp"
 
 #include <algorithm>
 #include <iostream>

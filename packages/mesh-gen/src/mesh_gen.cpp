@@ -1,7 +1,7 @@
 #include "mesh_gen.h"
 #include "data_structures.h"
 #include "io.h"
-#include "parser/dxf_parser.h"
+#include "parser/DxfParser.hpp"
 #include "delaunay.h"
 #include "mesh2d.h"
 

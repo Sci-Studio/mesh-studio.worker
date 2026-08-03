@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../data_structures.h"
-#include "dxf_codes.h"
+#include "DxfCodes.hpp"
 
 #include <fstream>
 

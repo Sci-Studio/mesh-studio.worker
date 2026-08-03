@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include "data_structures.h"
-#include "parser/dxf_parser.h"
+#include "parser/DxfParser.hpp"
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;
