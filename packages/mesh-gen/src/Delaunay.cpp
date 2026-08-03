@@ -4,7 +4,6 @@
 #include "Utils.hpp"
 
 #include <map>
-#include <iostream>
 #include <algorithm>
 
 Triangle makeTriangle(int a, int b, int c) {
