@@ -94,16 +94,13 @@ bool DxfParser::loadDxf(const char* path, Mesh& mesh) {
     std::istringstream iss;
     GROUP_CODE code = 0;
 
-
     while(readPair(in, code, value)) {
 
         if(code == DXF::NAME && value == DXF::ENTITIES) {
             readPair(in, code, value);
             parseEntites(in, mesh, code, value);
             break;
-        }
-
-        
+        }    
     }
 
     return true;
