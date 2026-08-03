@@ -7,7 +7,7 @@
 #include <iostream>
 #include <algorithm>
 
-Triangle make_tri(int a, int b, int c) {
+Triangle makeTriangle(int a, int b, int c) {
     Triangle t;
     t.v[0] = a;
     t.v[1] = b;
@@ -21,7 +21,7 @@ Triangle make_tri(int a, int b, int c) {
 
 typedef std::pair<int, int> EdgeKey;
 
-EdgeKey undirected_edge(int a, int b) {
+EdgeKey undirectedEdge(int a, int b) {
     return (a < b) ? EdgeKey{a, b} : EdgeKey{b, a};
 }
 
@@ -53,9 +53,9 @@ bool triangulate(Mesh& mesh) {
 
     // ensure super-triangle is CCW (counter clockwise)
     if(orient2d(mesh.points[s0], mesh.points[s1], mesh.points[s2]) > 0.0){
-        mesh.triangles.push_back(make_tri(s0, s1, s2));
+        mesh.triangles.push_back(makeTriangle(s0, s1, s2));
     } else {
-        mesh.triangles.push_back(make_tri(s0, s2, s1));
+        mesh.triangles.push_back(makeTriangle(s0, s2, s1));
     }
 
     for (int pi = 0; pi < n; ++pi) {
@@ -85,7 +85,7 @@ bool triangulate(Mesh& mesh) {
             for (int e = 0; e < COMPLEX_NO_VERTICES; ++e) {
                 const int a = verts[e];
                 const int b = verts[(e + 1) % COMPLEX_NO_VERTICES];
-                const EdgeKey key = undirected_edge(a, b);
+                const EdgeKey key = undirectedEdge(a, b);
                 edge_count[key] += 1;
                 directed[key] = EdgeKey(a, b);  // CCW edge from the bad triangle
             }
@@ -114,7 +114,7 @@ bool triangulate(Mesh& mesh) {
               a = b;
               b = tmp;
             }
-            mesh.triangles.push_back(make_tri(a, b, pi));
+            mesh.triangles.push_back(makeTriangle(a, b, pi));
         }
     }
 
