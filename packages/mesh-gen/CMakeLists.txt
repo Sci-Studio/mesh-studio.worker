@@ -18,12 +18,12 @@ enable_testing()
 # Shared library -> libMeshGen.so
 add_library(MeshGen SHARED
   src/MeshGen.cpp
-  src/IO.cpp
   src/Delaunay.cpp
   src/Predicates.cpp
   src/Mesh2D.cpp
   src/Utils.cpp
   src/parser/DxfParser.cpp
+  src/parser/OffParser.cpp
 )
 
 target_include_directories(MeshGen

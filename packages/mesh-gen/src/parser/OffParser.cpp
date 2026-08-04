@@ -1,12 +1,12 @@
-#include "IO.hpp"
+#include "parser/OffParser.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <string>
 
+using namespace parser::off;
 
-bool loadOff(const char* path, Mesh& mesh) {
-
+bool OffParser::loadMesh(const char* path, Mesh& mesh) {
     mesh.points.clear();
     mesh.triangles.clear();
 
