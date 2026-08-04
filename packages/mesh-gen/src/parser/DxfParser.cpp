@@ -4,8 +4,9 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <fstream>
 
-using namespace dxf;
+using namespace parser::dxf;
 
 bool DxfParser::addUnique(std::vector<Vec2>& points, const Vec2& point) {
 
@@ -79,7 +80,7 @@ void DxfParser::parseEntites(std::istream& in, Mesh& mesh, GROUP_CODE& code, std
     }
 }
 
-bool DxfParser::loadDxf(const char* path, Mesh& mesh) {
+bool DxfParser::loadMesh(const char* path, Mesh& mesh) {
     mesh.points.clear();
     mesh.triangles.clear();
 

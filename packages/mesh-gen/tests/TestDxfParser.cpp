@@ -1,16 +1,15 @@
 #include <gtest/gtest.h>
 #include <algorithm>
-#include <iostream>
 #include "DataStructures.hpp"
 #include "parser/DxfParser.hpp"
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;
-    dxf::DxfParser parser;
+    parser::dxf::DxfParser parser;
 
     const char* dfx_path = "../data/rectangle-prism-Shape2DView.dxf";
     
-    bool is_loaded = parser.loadDxf(dfx_path, mesh);
+    bool is_loaded = parser.loadMesh(dfx_path, mesh);
 
     ASSERT_TRUE(is_loaded);
     ASSERT_FALSE(mesh.points.empty());
