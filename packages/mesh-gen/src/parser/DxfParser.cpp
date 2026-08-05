@@ -4,8 +4,9 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <fstream>
 
-using namespace dxf;
+using namespace parser::dxf;
 
 bool DxfParser::addUnique(std::vector<Vec2>& points, const Vec2& point) {
 
@@ -27,20 +28,20 @@ bool DxfParser::addUnique(std::vector<Vec2>& points, const Vec2& point) {
 bool DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::string& value) {
 
     std::string line;
-    std::istringstream iss;
+    std::istringstream istringstream;
 
     if(!std::getline(inputFile, line)) {
         return false;
     }
-    iss.str(line);
-    iss >> code;
+    istringstream.str(line);
+    istringstream >> code;
 
     if(!std::getline(inputFile, line)) {
         return false;
     }
-    iss.clear();
-    iss.str(line);
-    iss >> value;
+    istringstream.clear();
+    istringstream.str(line);
+    istringstream >> value;
 
     return true;
 }
@@ -69,36 +70,35 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
 
 }
 
-void DxfParser::parseEntites(std::istream& in, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
 
     while(code == dxf::ENTITY_TYPE && value != dxf::ENDSEC) {
         if (code == dxf::ENTITY_TYPE && value == dxf::LINE) {
-            parseLine(in, mesh, code, value);
+            parseLine(inputFile, mesh, code, value);
             continue;
         }
     }
 }
 
-bool DxfParser::loadDxf(const char* path, Mesh& mesh) {
+bool DxfParser::loadMesh(const char* path, Mesh& mesh) {
     mesh.points.clear();
     mesh.triangles.clear();
 
-    std::ifstream in(path);
-    if (!in) {
+    std::ifstream inputFile(path);
+    if (!inputFile) {
       std::cerr << "Failed to open .dxf file: " << path << std::endl;
       return false;
     }
 
     std::string line;
     std::string value;
-    std::istringstream iss;
     GROUP_CODE code = 0;
 
-    while(readPair(in, code, value)) {
+    while(readPair(inputFile, code, value)) {
 
         if(code == dxf::NAME && value == dxf::ENTITIES) {
-            readPair(in, code, value);
-            parseEntites(in, mesh, code, value);
+            readPair(inputFile, code, value);
+            parseEntites(inputFile, mesh, code, value);
             break;
         }    
     }
