@@ -11,8 +11,8 @@ TEST(BoundingBox, ReturnsBoundingBox) {
 
     box = getboundingBox(points);
 
-    EXPECT_DOUBLE_EQ(box.max_x, 2.0);
-    EXPECT_DOUBLE_EQ(box.max_y, 9.0);
-    EXPECT_DOUBLE_EQ(box.min_x, 0.0);
-    EXPECT_DOUBLE_EQ(box.min_y, 1.0);
+    EXPECT_DOUBLE_EQ(box.maxX, 2.0);
+    EXPECT_DOUBLE_EQ(box.maxY, 9.0);
+    EXPECT_DOUBLE_EQ(box.minX, 0.0);
+    EXPECT_DOUBLE_EQ(box.minY, 1.0);
 }

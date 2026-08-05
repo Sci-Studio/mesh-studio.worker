@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <stdexcept>
-#include <utility>
 
 BoundingBox getboundingBox(const std::vector<Vec2>& points) {
 
@@ -16,11 +15,11 @@ BoundingBox getboundingBox(const std::vector<Vec2>& points) {
     };
 
     for (const auto& p : points) {
-        box.min_x = std::min(box.min_x, p.x);
-        box.max_x = std::max(box.max_x, p.x);
+        box.minX = std::min(box.minX, p.x);
+        box.maxX = std::max(box.maxX, p.x);
 
-        box.min_y = std::min(box.min_y, p.y);
-        box.max_y = std::max(box.max_y, p.x);
+        box.minY = std::min(box.minY, p.y);
+        box.maxY = std::max(box.maxY, p.x);
 
     }
     return box;

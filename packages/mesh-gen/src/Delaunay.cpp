@@ -34,11 +34,11 @@ bool triangulate(Mesh& mesh) {
 
     BoundingBox box = getboundingBox(mesh.points);
 
-    const double dx = box.max_x - box.min_x;
-    const double dy = box.max_y - box.min_y;
+    const double dx = box.maxX - box.minY;
+    const double dy = box.maxY - box.minY;
     const double delta = std::max(dx, dy);
-    const double mid_x = 0.5 * (box.min_x + box.max_x);
-    const double mid_y = 0.5 * (box.min_y + box.max_y);
+    const double midX = 0.5 * (box.minX + box.maxX);
+    const double midY = 0.5 * (box.minY + box.maxY);
 
     const double m = (delta > 0.0) ? (20.0 * delta) : 20.0;
     
@@ -46,9 +46,9 @@ bool triangulate(Mesh& mesh) {
     const int s1 = n + 1;
     const int s2 = n + 2;
 
-    mesh.points.push_back(Vec2{mid_x - 2.0 * m, mid_y -m});
-    mesh.points.push_back(Vec2{mid_x, mid_y + 2.0 * m});
-    mesh.points.push_back(Vec2{mid_x + 2.0 * m, mid_y - m});
+    mesh.points.push_back(Vec2{midX - 2.0 * m, midY -m});
+    mesh.points.push_back(Vec2{midX, midY + 2.0 * m});
+    mesh.points.push_back(Vec2{midX + 2.0 * m, midY - m});
 
     // ensure super-triangle is CCW (counter clockwise)
     if(orient2d(mesh.points[s0], mesh.points[s1], mesh.points[s2]) > 0.0){
