@@ -75,7 +75,7 @@ bool triangulate(Mesh& mesh) {
         }
 
         // Count undirected edges among bad triangles; boundary = count == 1
-        std::map<EdgeKey, int> edge_count;
+        std::map<EdgeKey, int> edgeCount;
         std::map<EdgeKey, EdgeKey> directed;  // store one directed (a->b) for orientation
        
         for (size_t bi = 0; bi < bad.size(); ++bi) {
@@ -85,13 +85,13 @@ bool triangulate(Mesh& mesh) {
                 const int a = verts[e];
                 const int b = verts[(e + 1) % COMPLEX_NO_VERTICES];
                 const EdgeKey key = undirectedEdge(a, b);
-                edge_count[key] += 1;
+                edgeCount[key] += 1;
                 directed[key] = EdgeKey(a, b);  // CCW edge from the bad triangle
             }
         }
 
         std::vector<EdgeKey> boundary;
-        for(std::map<EdgeKey, int>::const_iterator it = edge_count.begin(); it != edge_count.end(); ++it) {
+        for(std::map<EdgeKey, int>::const_iterator it = edgeCount.begin(); it != edgeCount.end(); ++it) {
             if (it->second == 1) {
                 boundary.push_back(directed[it->first]);
             }
