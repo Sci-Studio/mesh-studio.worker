@@ -19,7 +19,9 @@ bool DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
     });
 
     if (!contains) {
-        points.push_back(point);
+        Point p = point;
+        p.index = static_cast<int>(points.size()); 
+        points.push_back(p);
         return true;
     }
 
@@ -53,7 +55,7 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
     Point end;
     start.x = start.y = 0.0;
     end.x = end.y = 0.0;
-    
+
     while(readPair(inputFile, code, value) && code != 0) {
         if (code == dxf::START_X) {
             start.x = std::atof(value.c_str());
