@@ -1,4 +1,5 @@
 #include "parser/DxfParser.hpp"
+#include "geometry/Point.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -8,11 +9,11 @@
 
 using namespace parser::dxf;
 
-bool DxfParser::addUnique(std::vector<Vec2>& points, const Vec2& point) {
+bool DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
 
     constexpr double eps = 1e-9;
 
-    bool contains = std::ranges::any_of(points, [&](const Vec2& existing) {
+    bool contains = std::ranges::any_of(points, [&](const Point& existing) {
         return std::abs(existing.x - point.x) <= eps &&
                std::abs(existing.y - point.y) <= eps;
     });
@@ -48,8 +49,8 @@ bool DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::string&
 
 void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
 
-    Vec2 start;
-    Vec2 end;
+    Point start;
+    Point end;
     start.x = start.y = 0.0;
     end.x = end.y = 0.0;
     

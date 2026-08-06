@@ -2,6 +2,7 @@
 #include "DataStructures.hpp"
 #include "Predicates.hpp"
 #include "Utils.hpp"
+#include "geometry/Point.hpp"
 
 #include <map>
 #include <algorithm>
@@ -46,9 +47,9 @@ bool triangulate(Mesh& mesh) {
     const int s1 = n + 1;
     const int s2 = n + 2;
 
-    mesh.points.push_back(Vec2{midX - 2.0 * m, midY -m});
-    mesh.points.push_back(Vec2{midX, midY + 2.0 * m});
-    mesh.points.push_back(Vec2{midX + 2.0 * m, midY - m});
+    mesh.points.push_back(Point{midX - 2.0 * m, midY -m});
+    mesh.points.push_back(Point{midX, midY + 2.0 * m});
+    mesh.points.push_back(Point{midX + 2.0 * m, midY - m});
 
     // ensure super-triangle is CCW (counter clockwise)
     if(orient2d(mesh.points[s0], mesh.points[s1], mesh.points[s2]) > 0.0){
@@ -58,16 +59,16 @@ bool triangulate(Mesh& mesh) {
     }
 
     for (int pi = 0; pi < n; ++pi) {
-        const Vec2& p = mesh.points[pi];
+        const Point& p = mesh.points[pi];
 
         std::vector<int> bad;
         bad.reserve(mesh.triangles.size());
 
         for (int ti = 0; ti < static_cast<int>(mesh.triangles.size()); ++ti) {
             const Triangle& t = mesh.triangles[ti];
-            const Vec2& a = mesh.points[t.v[0]];
-            const Vec2& b = mesh.points[t.v[1]];
-            const Vec2& c = mesh.points[t.v[2]];
+            const Point& a = mesh.points[t.v[0]];
+            const Point& b = mesh.points[t.v[1]];
+            const Point& c = mesh.points[t.v[2]];
 
             if (incircle(a, b, c, p) > 0.0) {
                 bad.push_back(ti);

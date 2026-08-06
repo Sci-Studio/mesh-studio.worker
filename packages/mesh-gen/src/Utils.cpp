@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-BoundingBox getboundingBox(const std::vector<Vec2>& points) {
+BoundingBox getboundingBox(const std::vector<Point>& points) {
 
     if (points.empty()) {
         throw std::invalid_argument("Point vector is empty");

@@ -1,7 +1,9 @@
 #pragma once
 
-#include "DataStructures.hpp"
+#include "geometry/Point.hpp"
 
-double orient2d(const Vec2& a, const Vec2& b, const Vec2& c);
+using namespace geometry;
 
-double incircle(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& d);
+double orient2d(const Point& a, const Point& b, const Point& c);
+
+double incircle(const Point& a, const Point& b, const Point& c, const Point& d);

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "DataStructures.hpp"
 #include "parser/DxfParser.hpp"
+#include "geometry/Point.hpp"
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;
@@ -13,14 +14,14 @@ TEST(ParseDFXFile, ReturnsPointsInDfx) {
 
     ASSERT_TRUE(is_loaded);
     ASSERT_FALSE(mesh.points.empty());
-    Vec2 p0 = {5.0, -2.5};
-    Vec2 p1 = {5.0, 2.5};
+    Point p0 = {5.0, -2.5};
+    Point p1 = {5.0, 2.5};
     
     constexpr double eps = 1e-9;
 
     auto p0_it = std::ranges::find_if(
       mesh.points,
-      [&](const Vec2& p)
+      [&](const Point& p)
       {
           return std::abs(p0.x - p.x) < eps &&
                  std::abs(p0.y - p.y) < eps;
@@ -28,7 +29,7 @@ TEST(ParseDFXFile, ReturnsPointsInDfx) {
 
     auto p1_it = std::ranges::find_if(
       mesh.points,
-      [&](const Vec2& p)
+      [&](const Point& p)
       {
           return std::abs(p1.x - p.x) < eps &&
                  std::abs(p1.y - p.y) < eps;
