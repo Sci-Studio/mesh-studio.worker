@@ -9,41 +9,41 @@
 #include <string>
 
 
-int writeMeshToFile(const char* output_path) {
+int writeMeshToFile(const char* outputPath) {
 
-  std::ofstream out(output_path, std::ios::binary | std::ios::trunc);
+  std::ofstream out(outputPath, std::ios::binary | std::ios::trunc);
   if (!out) {
-    std::cerr << "mesh_gen::write_mesh_to_file: failed to create file '" << output_path << "' for writing\n";
+    std::cerr << "mesh_gen::write_mesh_to_file: failed to create file '" << outputPath << "' for writing\n";
     return 2;
   }
 
   out << "0 0 0\n";
   if (!out) {
-    std::cerr << "mesh_gen::write_mesh_to_file: failed to write to '" << output_path << "'\n";
+    std::cerr << "mesh_gen::write_mesh_to_file: failed to write to '" << outputPath << "'\n";
     return 3;
   }
 
   out.close();
   if (!out) {
-    std::cerr << "mesh_gen::write_mesh_to_file: failed to close '" << output_path << "'\n";
+    std::cerr << "mesh_gen::write_mesh_to_file: failed to close '" << outputPath << "'\n";
     return 4;
   }
 
   return 0;
 }
 
-int generateMesh(const char* input_path) {
+int generateMesh(const char* inputPath) {
 
   Mesh mesh;
   parser::dxf::DxfParser parser;
-  const char* svg_path = "delaunay.svg";
+  const char* svgPath = "delaunay.svg";
 
-  if(!parser.loadMesh(input_path, mesh)) {
-    std::cerr << "Failed to load mesh from " << input_path << std::endl;
+  if(!parser.loadMesh(inputPath, mesh)) {
+    std::cerr << "Failed to load mesh from " << inputPath << std::endl;
     return 1;
   }
 
-  std::cout << "Loaded " << mesh.points.size() << " points from " << input_path
+  std::cout << "Loaded " << mesh.points.size() << " points from " << inputPath
             << "\n";
 
   if (!triangulate(mesh)) {
@@ -69,11 +69,11 @@ int generateMesh(const char* input_path) {
 
   std::cout << "Validation OK (CCW + Delaunay)\n";
 
-  if (!writeSvg(mesh, svg_path)) {
-    std::cerr << "Failed to write SVG: " << svg_path << "\n";
+  if (!writeSvg(mesh, svgPath)) {
+    std::cerr << "Failed to write SVG: " << svgPath << "\n";
     return 5;
   }
-  std::cout << "Wrote " << svg_path << "\n";
+  std::cout << "Wrote " << svgPath << "\n";
 
   return 0;
 }

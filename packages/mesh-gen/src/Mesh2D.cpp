@@ -10,10 +10,10 @@
 bool allTrianglesCcw(const Mesh& mesh) {
   for (size_t i = 0; i < mesh.triangles.size(); ++i) {
     const Triangle& t = mesh.triangles[i];
-    const Vec2& a = mesh.points[t.v[0]];
-    const Vec2& b = mesh.points[t.v[1]];
-    const Vec2& c = mesh.points[t.v[2]];
-    if (orient2d(a, b, c) <= 0.0) {
+    const Point& a = mesh.points[t.v[0]];
+    const Point& b = mesh.points[t.v[1]];
+    const Point& c = mesh.points[t.v[2]];
+    if (orient2D(a, b, c) <= 0.0) {
       return false;
     }
   }
@@ -24,14 +24,14 @@ bool isDelaunay(const Mesh& mesh) {
   const int n = static_cast<int>(mesh.points.size());
   for (size_t ti = 0; ti < mesh.triangles.size(); ++ti) {
     const Triangle& t = mesh.triangles[ti];
-    const Vec2& a = mesh.points[t.v[0]];
-    const Vec2& b = mesh.points[t.v[1]];
-    const Vec2& c = mesh.points[t.v[2]];
+    const Point& a = mesh.points[t.v[0]];
+    const Point& b = mesh.points[t.v[1]];
+    const Point& c = mesh.points[t.v[2]];
     for (int pi = 0; pi < n; ++pi) {
       if (pi == t.v[0] || pi == t.v[1] || pi == t.v[2]) {
         continue;
       }
-      if (incircle(a, b, c, mesh.points[pi]) > 0.0) {
+      if (inCircle(a, b, c, mesh.points[pi]) > 0.0) {
         return false;
       }
     }
@@ -51,7 +51,7 @@ bool writeSvg(const Mesh& mesh, const std::string& path) {
   double max_y = min_y;
 
   for (size_t i = 1; i < mesh.points.size(); ++i) {
-    const Vec2& p = mesh.points[i];
+    const Point& p = mesh.points[i];
     if (p.x < min_x) min_x = p.x;
     if (p.y < min_y) min_y = p.y;
     if (p.x > max_x) max_x = p.x;
@@ -85,9 +85,9 @@ bool writeSvg(const Mesh& mesh, const std::string& path) {
 
   for (size_t i = 0; i < mesh.triangles.size(); ++i) {
     const Triangle& t = mesh.triangles[i];
-    const Vec2& a = mesh.points[t.v[0]];
-    const Vec2& b = mesh.points[t.v[1]];
-    const Vec2& c = mesh.points[t.v[2]];
+    const Point& a = mesh.points[t.v[0]];
+    const Point& b = mesh.points[t.v[1]];
+    const Point& c = mesh.points[t.v[2]];
     out << "    <polygon points=\"" << a.x << "," << a.y << " " << b.x << ","
         << b.y << " " << c.x << "," << c.y << "\" />\n";
   }
@@ -97,7 +97,7 @@ bool writeSvg(const Mesh& mesh, const std::string& path) {
   const double r = 0.015 * std::max(width, height);
 
   for (size_t i = 0; i < mesh.points.size(); ++i) {
-    const Vec2& p = mesh.points[i];
+    const Point& p = mesh.points[i];
     out << "    <circle cx=\"" << p.x << "\" cy=\"" << p.y << "\" r=\"" << r
         << "\" />\n";
   }

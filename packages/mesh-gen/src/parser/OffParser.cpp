@@ -1,4 +1,5 @@
 #include "parser/OffParser.hpp"
+#include "geometry/Point.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -40,7 +41,7 @@ bool OffParser::loadMesh(const char* path, Mesh& mesh) {
         double z = 0.0;
         inputFile >> x >> y >> z;
         
-        Vec2 p;
+        Point p;
         p.x = x;
         p.y = y;
         

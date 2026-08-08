@@ -1,12 +1,13 @@
 #pragma once
 
+#include "./geometry/Point.hpp"
+
+
 #include <vector>
 
-const unsigned int COMPLEX_NO_VERTICES = 3;
+using namespace geometry;
 
-struct Vec2 {
-    double x, y;
-};
+const unsigned int COMPLEX_NO_VERTICES = 3;
 
 struct Triangle {
     int v[COMPLEX_NO_VERTICES];
@@ -14,6 +15,6 @@ struct Triangle {
 };
 
 struct Mesh {
-    std::vector<Vec2> points;
+    std::vector<Point> points;
     std::vector<Triangle> triangles;
 };

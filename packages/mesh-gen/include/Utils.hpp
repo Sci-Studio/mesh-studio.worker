@@ -1,13 +1,14 @@
 #pragma once
 
-#include "DataStructures.hpp"
+#include "geometry/Point.hpp"
 
-#include <utility>
 #include <vector>
 
+using namespace geometry;
+
 struct BoundingBox {
-    double min_x, max_x;
-    double min_y, max_y;
+    double minX, maxX;
+    double minY, maxY;
 };
 
-BoundingBox getboundingBox(const std::vector<Vec2>& points);
+BoundingBox getboundingBox(const std::vector<Point>& points);
