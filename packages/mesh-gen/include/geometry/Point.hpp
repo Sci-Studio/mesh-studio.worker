@@ -12,6 +12,11 @@ namespace geometry {
         public:
             double x;
             double y;
+            PointType type = PointType::NORMAL;
             int index;
+        
+            bool isSymbolic() const {
+                return type == PointType::MINUS1 || type == PointType::MINUS2;
+            }
     };
 }

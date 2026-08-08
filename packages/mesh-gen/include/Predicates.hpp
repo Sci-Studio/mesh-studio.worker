@@ -4,6 +4,8 @@
 
 using namespace geometry;
 
-double orient2d(const Point& a, const Point& b, const Point& c);
+bool lexographicGreater(const Point& a, const Point& b);
 
-double incircle(const Point& a, const Point& b, const Point& c, const Point& d);
+double orient2D(const Point& a, const Point& b, const Point& c);
+
+double inCircle(const Point& a, const Point& b, const Point& c, const Point& d);

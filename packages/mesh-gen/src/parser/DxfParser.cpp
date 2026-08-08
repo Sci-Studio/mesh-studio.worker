@@ -20,7 +20,8 @@ bool DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
 
     if (!contains) {
         Point p = point;
-        p.index = static_cast<int>(points.size()); 
+        p.index = static_cast<int>(points.size());
+        p.type = PointType::NORMAL; 
         points.push_back(p);
         return true;
     }

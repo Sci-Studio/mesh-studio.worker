@@ -13,7 +13,7 @@ bool allTrianglesCcw(const Mesh& mesh) {
     const Point& a = mesh.points[t.v[0]];
     const Point& b = mesh.points[t.v[1]];
     const Point& c = mesh.points[t.v[2]];
-    if (orient2d(a, b, c) <= 0.0) {
+    if (orient2D(a, b, c) <= 0.0) {
       return false;
     }
   }
@@ -31,7 +31,7 @@ bool isDelaunay(const Mesh& mesh) {
       if (pi == t.v[0] || pi == t.v[1] || pi == t.v[2]) {
         continue;
       }
-      if (incircle(a, b, c, mesh.points[pi]) > 0.0) {
+      if (inCircle(a, b, c, mesh.points[pi]) > 0.0) {
         return false;
       }
     }
