@@ -59,3 +59,30 @@ TEST(ParseDFXFile, LineEntitiesPopulateConstraintEdges) {
         EXPECT_NE(e.a, e.b);
     }
 }
+
+namespace {
+
+bool hasPointNear(const std::vector<Point>& points, double x, double y, double eps = 1e-6) {
+    return std::ranges::any_of(points, [&](const Point& p) {
+        return std::abs(p.x - x) <= eps && std::abs(p.y - y) <= eps;
+    });
+}
+
+}  // namespace
+
+TEST(ParseDFXFile, HingeLoadsArcAndSplineConstraints) {
+    Mesh mesh;
+    parser::dxf::DxfParser parser;
+
+    ASSERT_TRUE(parser.loadMesh("../data/hing-without-pocket-Shape2DView.dxf", mesh));
+
+    // LINE-only load was 16 points / 12 edges; ARC samples + SPLINE controls add more
+    EXPECT_GT(mesh.points.size(), 16u);
+    EXPECT_GT(mesh.constraints.size(), 12u);
+
+    // ARC (40,15) r=10, 0°→90° → endpoint (50,15)
+    EXPECT_TRUE(hasPointNear(mesh.points, 50.0, 15.0));
+    // SPLINE control endpoint on inner slot
+    EXPECT_TRUE(hasPointNear(mesh.points, 30.0, 2.5));
+    EXPECT_TRUE(hasPointNear(mesh.points, 50.0, 2.5));
+}
