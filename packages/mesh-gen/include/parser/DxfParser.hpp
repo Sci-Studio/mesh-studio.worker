@@ -16,7 +16,8 @@ namespace parser {
                 bool loadMesh(const char* path, Mesh& mesh) override;
             
             private:
-                bool addUnique(std::vector<Point>& points, const Point& point);
+                // Inserts point if not already present (eps). Returns index in points.
+                int addUnique(std::vector<Point>& points, const Point& point);
                 bool readPair(std::istream& inputFile, dxf::GROUP_CODE& code, std::string& value);
                 void parseLine(std::istream& inputFile, Mesh& mesh, dxf::GROUP_CODE& code, std::string& value);
                 void parseEntites(std::istream& inputFile, Mesh& mesh, dxf::GROUP_CODE& code, std::string& value);

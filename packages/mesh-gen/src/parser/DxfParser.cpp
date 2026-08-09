@@ -1,7 +1,7 @@
 #include "parser/DxfParser.hpp"
 #include "geometry/Point.hpp"
 
-#include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -9,24 +9,22 @@
 
 using namespace parser::dxf;
 
-bool DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
-
+int DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
     constexpr double eps = 1e-9;
 
-    bool contains = std::ranges::any_of(points, [&](const Point& existing) {
-        return std::abs(existing.x - point.x) <= eps &&
-               std::abs(existing.y - point.y) <= eps;
-    });
-
-    if (!contains) {
-        Point p = point;
-        p.index = static_cast<int>(points.size());
-        p.type = PointType::NORMAL; 
-        points.push_back(p);
-        return true;
+    for (size_t i = 0; i < points.size(); ++i) {
+        const Point& existing = points[i];
+        if (std::abs(existing.x - point.x) <= eps &&
+            std::abs(existing.y - point.y) <= eps) {
+            return static_cast<int>(i);
+        }
     }
 
-    return false;
+    Point p = point;
+    p.index = static_cast<int>(points.size());
+    p.type = PointType::NORMAL;
+    points.push_back(p);
+    return p.index;
 }
 
 bool DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::string& value) {
@@ -69,17 +67,22 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
         }
     }
 
-    addUnique(mesh.points, start);
-    addUnique(mesh.points, end);
-
+    const int i0 = addUnique(mesh.points, start);
+    const int i1 = addUnique(mesh.points, end);
+    if (i0 != i1) {
+        mesh.constraints.push_back(Edge{i0, i1});
+    }
 }
 
 void DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
 
-    while(code == dxf::ENTITY_TYPE && value != dxf::ENDSEC) {
-        if (code == dxf::ENTITY_TYPE && value == dxf::LINE) {
+    while (code == dxf::ENTITY_TYPE && value != dxf::ENDSEC) {
+        if (value == dxf::LINE) {
             parseLine(inputFile, mesh, code, value);
             continue;
+        }
+        // Skip unsupported entities until the next group-0 marker.
+        while (readPair(inputFile, code, value) && code != dxf::ENTITY_TYPE) {
         }
     }
 }
@@ -87,6 +90,7 @@ void DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& co
 bool DxfParser::loadMesh(const char* path, Mesh& mesh) {
     mesh.points.clear();
     mesh.triangles.clear();
+    mesh.constraints.clear();
 
     std::ifstream inputFile(path);
     if (!inputFile) {

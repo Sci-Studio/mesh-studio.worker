@@ -14,7 +14,13 @@ struct Triangle {
     int neigh[COMPLEX_NO_VERTICES];
 };
 
+struct Edge {
+    int a = -1;
+    int b = -1;
+};
+
 struct Mesh {
     std::vector<Point> points;
     std::vector<Triangle> triangles;
+    std::vector<Edge> constraints;
 };
