@@ -55,7 +55,7 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
     start.x = start.y = 0.0;
     end.x = end.y = 0.0;
 
-    while(readPair(inputFile, code, value) && code != 0) {
+    while (readPair(inputFile, code, value) && code != dxf::ENTITY_TYPE) {
         if (code == dxf::START_X) {
             start.x = std::atof(value.c_str());
         } else if (code == dxf::START_Y) {
@@ -67,6 +67,7 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
         }
     }
 
+    // LINE → unique endpoints + one constraint edge between them
     const int i0 = addUnique(mesh.points, start);
     const int i1 = addUnique(mesh.points, end);
     if (i0 != i1) {

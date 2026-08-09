@@ -43,7 +43,8 @@ int generateMesh(const char* inputPath) {
     return 1;
   }
 
-  std::cout << "Loaded " << mesh.points.size() << " points from " << inputPath
+  std::cout << "Loaded " << mesh.points.size() << " points, "
+            << mesh.constraints.size() << " constraint edges from " << inputPath
             << "\n";
 
   if (!triangulate(mesh)) {
