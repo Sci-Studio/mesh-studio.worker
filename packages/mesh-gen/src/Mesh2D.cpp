@@ -45,29 +45,29 @@ bool writeSvg(const Mesh& mesh, const std::string& path) {
     return false;
   }
 
-  double min_x = mesh.points[0].x;
-  double min_y = mesh.points[0].y;
-  double max_x = min_x;
-  double max_y = min_y;
+  double minX = mesh.points[0].x;
+  double minY = mesh.points[0].y;
+  double maxX = minX;
+  double maxY = minY;
 
   for (size_t i = 1; i < mesh.points.size(); ++i) {
     const Point& p = mesh.points[i];
-    if (p.x < min_x) min_x = p.x;
-    if (p.y < min_y) min_y = p.y;
-    if (p.x > max_x) max_x = p.x;
-    if (p.y > max_y) max_y = p.y;
+    if (p.x < minX) minX = p.x;
+    if (p.y < minY) minY = p.y;
+    if (p.x > maxX) maxX = p.x;
+    if (p.y > maxY) maxY = p.y;
   }
 
-  const double pad = 0.05 * std::max(max_x - min_x, max_y - min_y);
-  const double use_pad = (pad > 0.0) ? pad : 0.1;
+  const double pad = 0.05 * std::max(maxX - minX, maxY - minY);
+  const double usePad = (pad > 0.0) ? pad : 0.1;
 
-  min_x -= use_pad;
-  min_y -= use_pad;
-  max_x += use_pad;
-  max_y += use_pad;
+  minX -= usePad;
+  minY -= usePad;
+  maxX += usePad;
+  maxY += usePad;
 
-  const double width = max_x - min_x;
-  const double height = max_y - min_y;
+  const double width = maxX - minX;
+  const double height = maxY - minY;
 
   std::ofstream out(path.c_str());
   if (!out) {
@@ -76,7 +76,7 @@ bool writeSvg(const Mesh& mesh, const std::string& path) {
 
   out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
   out << "<svg xmlns=\"http://www.w3.org/2000/svg\" "
-      << "viewBox=\"" << min_x << " " << min_y << " " << width << " " << height
+      << "viewBox=\"" << minX << " " << minY << " " << width << " " << height
       << "\" width=\"800\" height=\"800\">\n";
 
   const double strokeTri = 0.005 * std::max(width, height);
