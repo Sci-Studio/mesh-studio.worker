@@ -1,5 +1,6 @@
 #include "parser/DxfParser.hpp"
 #include "geometry/Point.hpp"
+#include "geometry/Arc.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -9,40 +10,6 @@
 #include <vector>
 
 using namespace parser::dxf;
-
-namespace {
-
-constexpr double kPi = 3.14159265358979323846;
-constexpr double kDegToRad = kPi / 180.0;
-// Samples per 90° of arc (quarter-circle corners get this many segments)
-constexpr int kArcSamplesPerQuarter = 8;
-
-double degToRad(double degrees) {
-    return degrees * kDegToRad;
-}
-
-// Positive CCW span from startDeg to endDeg in [0, 360]
-double ccwSpanDegrees(double startDeg, double endDeg) {
-    double span = endDeg - startDeg;
-    while (span <= 0.0) {
-        span += 360.0;
-    }
-    while (span > 360.0) {
-        span -= 360.0;
-    }
-    return span;
-}
-
-Point pointOnCircle(double cx, double cy, double radius, double angleDeg) {
-    const double a = degToRad(angleDeg);
-    Point p;
-    p.x = cx + radius * std::cos(a);
-    p.y = cy + radius * std::sin(a);
-    p.type = PointType::NORMAL;
-    return p;
-}
-
-}  // namespace
 
 int DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
     constexpr double eps = 1e-9;
@@ -124,45 +91,30 @@ void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
 }
 
 void DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
-    double cx = 0.0;
-    double cy = 0.0;
-    double radius = 0.0;
-    double startAngle = 0.0;
-    double endAngle = 0.0;
+    Arc arc;
+    ArcDiscretizationOption options(0.01, 10);
 
     while (readPair(inputFile, code, value) && code != dxf::ENTITY_TYPE) {
         if (code == dxf::START_X) {
-            cx = std::atof(value.c_str());
+            arc.centerX = std::stod(value);
         } else if (code == dxf::START_Y) {
-            cy = std::atof(value.c_str());
+            arc.centerY = std::stod(value);
         } else if (code == dxf::RADIUS) {
-            radius = std::atof(value.c_str());
+            arc.radius = std::stod(value);
         } else if (code == dxf::START_ANGLE) {
-            startAngle = std::atof(value.c_str());
+            arc.startAngleDegree = std::stod(value);
         } else if (code == dxf::END_ANGLE) {
-            endAngle = std::atof(value.c_str());
+            arc.endAngleDegree = std::stod(value);
         }
     }
 
-    if (radius <= 0.0) {
+    if (arc.radius <= 0.0) {
         return;
     }
 
-    const double span = ccwSpanDegrees(startAngle, endAngle);
-    int segments = static_cast<int>(std::lround(span / 90.0 * kArcSamplesPerQuarter));
-    if (segments < 1) {
-        segments = 1;
-    }
+    std::vector<Point> polyline = arc.discretizeArc(options);
 
-    std::vector<Point> poly;
-    poly.reserve(static_cast<size_t>(segments) + 1);
-    for (int i = 0; i <= segments; ++i) {
-        const double t = static_cast<double>(i) / static_cast<double>(segments);
-        const double angle = startAngle + t * span;
-        poly.push_back(pointOnCircle(cx, cy, radius, angle));
-    }
-
-    addPolylineConstraints(mesh, poly);
+    addPolylineConstraints(mesh, polyline);
 }
 
 void DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {

@@ -22,6 +22,7 @@ add_library(MeshGen SHARED
   src/Predicates.cpp
   src/Mesh2D.cpp
   src/Utils.cpp
+  src/geometry/Arc.cpp
   src/parser/DxfParser.cpp
   src/parser/OffParser.cpp
 )
