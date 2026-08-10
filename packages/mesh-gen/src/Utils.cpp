@@ -19,7 +19,7 @@ BoundingBox getboundingBox(const std::vector<Point>& points) {
         box.maxX = std::max(box.maxX, p.x);
 
         box.minY = std::min(box.minY, p.y);
-        box.maxY = std::max(box.maxY, p.x);
+        box.maxY = std::max(box.maxY, p.y);
 
     }
     return box;
