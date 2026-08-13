@@ -21,7 +21,7 @@ namespace geometry {
       int addUnique(const Point& point);
             
       void addConstraintEdge(int i0, int i1);
-      void addPolylineConstraints(const std::vector<Point>& polyline);
+      void addPolylineConstraints(const std::vector<Point>& polyline, bool closed);
   };
 
 }

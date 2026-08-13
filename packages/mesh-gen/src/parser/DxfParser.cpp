@@ -82,7 +82,7 @@ void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& c
 
     auto polyline = arc.discretizeArc(options);
 
-    mesh.addPolylineConstraints(polyline);
+    mesh.addPolylineConstraints(polyline, false);
 }
 
 void dxf::DxfParser::parseCircle(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
@@ -104,7 +104,7 @@ void dxf::DxfParser::parseCircle(std::istream& inputFile, Mesh& mesh, GROUP_CODE
         return;
     }
 
-    mesh.addPolylineConstraints(circle.discretize(options));
+    mesh.addPolylineConstraints(circle.discretize(options), circle.isClosed());
 }
 
 void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
@@ -131,7 +131,7 @@ void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE
 
     const auto polyline = spline.discretizeSpline(geometryTolerance);
 
-    mesh.addPolylineConstraints(polyline);
+    mesh.addPolylineConstraints(polyline, false);
 }
 
 void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {

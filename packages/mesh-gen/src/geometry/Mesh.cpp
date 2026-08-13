@@ -65,15 +65,20 @@ namespace geometry {
     }
   }
 
-  void Mesh::addPolylineConstraints(const std::vector<Point>& polyline) {
+  void Mesh::addPolylineConstraints(const std::vector<Point>& polyline, bool closed) {
     if (polyline.size() < 2) {
         return;
     }
-    int previous = addUnique(polyline[0]);
+    const int first = addUnique(polyline.front());
+    int previous = first;
     for (size_t i = 1; i < polyline.size(); ++i) {
         const int current = addUnique(polyline[i]);
         addConstraintEdge( previous, current);
         previous = current;
+    }
+
+    if (closed && polyline.size() >= 3) {
+      addConstraintEdge(previous, first);
     }
   }
 }  
