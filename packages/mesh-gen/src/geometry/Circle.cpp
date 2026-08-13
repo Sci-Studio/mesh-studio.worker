@@ -19,23 +19,26 @@ namespace geometry {
     }
 
     constexpr double spanDegree = 360.0;
+    constexpr int minSegments = 3;
     const double spanRadian = degreeToRadians(spanDegree);
 
     double maxAngleRadian = degreeToRadians(options.maxAngleDegree);
+
     if (options.maxChordError > 0.0 && radius > 0.0) {
-      const double ratio = std::min(1.0, options.maxChordError / radius);
-      const double chordLimitedAngle = 2.0 * std::acos(1.0 - ratio);
-      maxAngleRadian = std::min(maxAngleRadian, chordLimitedAngle);
+        const double ratio = std::min(1.0, options.maxChordError / radius);
+        const double chordLimitedAngle = 2.0 * std::acos(1.0 - ratio);
+        maxAngleRadian = std::min(maxAngleRadian, chordLimitedAngle);
     }
 
-    const int segments = std::max(3, static_cast<int>(std::ceil(spanRadian / maxAngleRadian)));
+    const int segments = std::max(minSegments, static_cast<int>(std::ceil(spanRadian / maxAngleRadian)));
 
     std::vector<Point> points;
-    points.reserve(static_cast<std::size_t>(segments) + 1);
+    points.reserve(static_cast<std::size_t>(segments));
 
-    for (int i = 0; i <= segments; ++i) {
+    for (int i = 0; i < segments; ++i) {
       const double delta = static_cast<double>(i) / static_cast<double>(segments);
       const double angleDegree = delta * spanDegree;
+
       points.push_back(pointOnCircle(center.x, center.y, radius, angleDegree));
     }
 
