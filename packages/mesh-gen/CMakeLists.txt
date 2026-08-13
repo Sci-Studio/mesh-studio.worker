@@ -22,6 +22,7 @@ add_library(MeshGen SHARED
   src/Mesh2D.cpp
   src/geometry/Predicates.cpp
   src/geometry/Arc.cpp
+  src/geometry/Circle.cpp
   src/geometry/Spline.cpp
   src/geometry/GeometryUtils.cpp
   src/geometry/Mesh.cpp

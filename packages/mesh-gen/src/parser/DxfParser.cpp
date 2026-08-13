@@ -2,6 +2,8 @@
 #include "geometry/Mesh.hpp"
 #include "geometry/Point.hpp"
 #include "geometry/Arc.hpp"
+#include "geometry/Circle.hpp"
+#include "geometry/Curve.hpp"
 #include "geometry/Spline.hpp"
 #include "parser/DxfCodes.hpp"
 
@@ -83,6 +85,28 @@ void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& c
     mesh.addPolylineConstraints(polyline);
 }
 
+void dxf::DxfParser::parseCircle(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
+                                 std::string& value) {
+    Circle circle;
+    DiscretizationOptions options;
+
+    while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
+        if (code == dxf::circle::CENTER_X) {
+            circle.center.x = std::stod(value);
+        } else if (code == dxf::circle::CENTER_Y) {
+            circle.center.y = std::stod(value);
+        } else if (code == dxf::circle::RADIUS) {
+            circle.radius = std::stod(value);
+        }
+    }
+
+    if (circle.radius <= 0.0) {
+        return;
+    }
+
+    mesh.addPolylineConstraints(circle.discretize(options));
+}
+
 void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
 
     Spline spline;
@@ -119,6 +143,10 @@ void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_COD
         }
         if (value == dxf::common::ARC) {
             parseArc(inputFile, mesh, code, value);
+            continue;
+        }
+        if (value == dxf::common::CIRCLE) {
+            parseCircle(inputFile, mesh, code, value);
             continue;
         }
         if (value == dxf::common::SPLINE) {

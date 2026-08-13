@@ -18,6 +18,7 @@ namespace parser {
              bool readPair(std::istream& inputFile, GROUP_CODE& code, std::string& value);
              void parseLine(std::istream& inputFile, geometry::Mesh& mesh, GROUP_CODE& code, std::string& value);
              void parseArc(std::istream& inputFile, geometry::Mesh& mesh, GROUP_CODE& code, std::string& value);
+             void parseCircle(std::istream& inputFile, geometry::Mesh& mesh, GROUP_CODE& code, std::string& value);
              void parseSpline(std::istream& inputFile, geometry::Mesh& mesh, GROUP_CODE& code, std::string& value);
              void parseEntites(std::istream& inputFile, geometry::Mesh& mesh, GROUP_CODE& code, std::string& value);
         };

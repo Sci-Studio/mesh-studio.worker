@@ -14,6 +14,7 @@ namespace parser {
             inline constexpr ENTITY_NAME ENDSEC = "ENDSEC";
             inline constexpr ENTITY_NAME LINE = "LINE";
             inline constexpr ENTITY_NAME ARC = "ARC";
+            inline constexpr ENTITY_NAME CIRCLE = "CIRCLE";
             inline constexpr ENTITY_NAME SPLINE = "SPLINE";
         } 
 
@@ -30,7 +31,13 @@ namespace parser {
             constexpr GROUP_CODE RADIUS = 40;
             constexpr GROUP_CODE START_ANGLE = 50;  // degrees, CCW from +X
             constexpr GROUP_CODE END_ANGLE = 51;
-        }  
+        }
+
+        namespace circle {
+            constexpr GROUP_CODE CENTER_X = 10;
+            constexpr GROUP_CODE CENTER_Y = 20;
+            constexpr GROUP_CODE RADIUS = 40;
+        }
 
         namespace spline {
             constexpr GROUP_CODE CONTROL_X = 10;
