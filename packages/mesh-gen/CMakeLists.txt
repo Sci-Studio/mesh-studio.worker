@@ -21,9 +21,9 @@ add_library(MeshGen SHARED
   src/Delaunay.cpp
   src/Predicates.cpp
   src/Mesh2D.cpp
-  src/Utils.cpp
   src/geometry/Arc.cpp
   src/geometry/Spline.cpp
+  src/geometry/GeometryUtils.cpp
   src/parser/DxfParser.cpp
   src/parser/OffParser.cpp
 )

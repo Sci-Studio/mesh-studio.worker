@@ -1,5 +1,9 @@
 #include <gtest/gtest.h>
-#include "Utils.hpp"
+
+#include "geometry/GeometryUtils.hpp"
+#include "geometry/Point.hpp"
+
+using namespace geometry;
 
 TEST(BoundingBox, ReturnsBoundingBox) {
     std::vector<Point> points;

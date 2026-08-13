@@ -1,7 +1,7 @@
 #include "MeshGen.hpp"
 #include "DataStructures.hpp"
 #include "parser/DxfParser.hpp"
-#include "Utils.hpp"
+#include "geometry/GeometryUtils.hpp"
 #include "Delaunay.hpp"
 #include "Mesh2D.hpp"
 
