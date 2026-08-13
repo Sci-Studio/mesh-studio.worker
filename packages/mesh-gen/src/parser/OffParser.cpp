@@ -1,4 +1,5 @@
 #include "parser/OffParser.hpp"
+#include "geometry/Mesh.hpp"
 #include "geometry/Point.hpp"
 
 #include <fstream>
@@ -6,10 +7,10 @@
 #include <string>
 
 using namespace parser::off;
+using namespace geometry;
 
 bool OffParser::loadMesh(const char* path, Mesh& mesh) {
-    mesh.points.clear();
-    mesh.triangles.clear();
+    mesh.clear();
 
     std::ifstream inputFile(path);
 
@@ -20,7 +21,7 @@ bool OffParser::loadMesh(const char* path, Mesh& mesh) {
 
     std::string token;
 
-    if(!(inputFile >> token) || token != "OFF") {
+    if (!(inputFile >> token) || token != "OFF") {
         std::cerr << "Invalid .off file: " << path << std::endl;
         return false;
     }
@@ -29,22 +30,25 @@ bool OffParser::loadMesh(const char* path, Mesh& mesh) {
     int numberOfFaces = 0;
     int numberOfEdges = 0;
 
-    if(!(inputFile >> numberOfVertices >> numberOfFaces >> numberOfEdges) || numberOfVertices < 0) {
+    if (!(inputFile >> numberOfVertices >> numberOfFaces >> numberOfEdges) ||
+        numberOfVertices < 0) {
         return false;
     }
 
     mesh.points.reserve(static_cast<size_t>(numberOfVertices));
-    
-    for(int i = 0; i < numberOfVertices; i++) {
+
+    for (int i = 0; i < numberOfVertices; i++) {
         double x = 0.0;
         double y = 0.0;
         double z = 0.0;
         inputFile >> x >> y >> z;
-        
+
         Point p;
         p.x = x;
         p.y = y;
-        
+        p.index = i;
+        p.type = PointType::NORMAL;
+
         mesh.points.push_back(p);
     }
 

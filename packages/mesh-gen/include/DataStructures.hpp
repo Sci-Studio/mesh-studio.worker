@@ -1,26 +1,8 @@
 #pragma once
 
-#include "./geometry/Point.hpp"
-
-
-#include <vector>
+// Compatibility header — prefer #include "geometry/Mesh.hpp"
+#include "geometry/Mesh.hpp"
 
 using namespace geometry;
 
-const unsigned int COMPLEX_NO_VERTICES = 3;
-
-struct Triangle {
-    int v[COMPLEX_NO_VERTICES];
-    int neigh[COMPLEX_NO_VERTICES];
-};
-
-struct Edge {
-    int a = -1;
-    int b = -1;
-};
-
-struct Mesh {
-    std::vector<Point> points;
-    std::vector<Triangle> triangles;
-    std::vector<Edge> constraints;
-};
+inline constexpr unsigned int COMPLEX_NO_VERTICES = Triangle::kVertexCount;

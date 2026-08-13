@@ -1,5 +1,5 @@
 #include "MeshGen.hpp"
-#include "DataStructures.hpp"
+#include "geometry/Mesh.hpp"
 #include "parser/DxfParser.hpp"
 #include "geometry/GeometryUtils.hpp"
 #include "Delaunay.hpp"
@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 
+using namespace geometry;
 
 int writeMeshToFile(const Mesh& mesh, const std::string& path) {
 

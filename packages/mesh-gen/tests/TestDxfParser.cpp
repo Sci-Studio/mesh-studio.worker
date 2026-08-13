@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <cmath>
-#include "DataStructures.hpp"
+#include "geometry/Mesh.hpp"
 #include "parser/DxfParser.hpp"
 #include "geometry/Point.hpp"
+
+using namespace geometry;
 
 TEST(ParseDFXFile, ReturnsPointsInDfx) {
     Mesh mesh;

@@ -1,5 +1,7 @@
 #include "parser/DxfParser.hpp"
+#include "geometry/Mesh.hpp"
 #include "geometry/Point.hpp"
+#include "geometry/Edge.hpp"
 #include "geometry/Arc.hpp"
 #include "geometry/Spline.hpp"
 #include "parser/DxfCodes.hpp"
@@ -12,6 +14,7 @@
 #include <vector>
 
 using namespace parser;
+using namespace geometry;
 
 int dxf::DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
     constexpr double eps = 1e-9;
@@ -33,7 +36,7 @@ int dxf::DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
 
 void dxf::DxfParser::addConstraintEdge(Mesh& mesh, int i0, int i1) {
     if (i0 != i1) {
-        mesh.constraints.push_back(Edge{i0, i1});
+        mesh.constraints.push_back(Edge(i0, i1));
     }
 }
 
@@ -168,9 +171,7 @@ void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_COD
 }
 
 bool dxf::DxfParser::loadMesh(const char* path, Mesh& mesh) {
-    mesh.points.clear();
-    mesh.triangles.clear();
-    mesh.constraints.clear();
+    mesh.clear();
 
     std::ifstream inputFile(path);
     if (!inputFile) {

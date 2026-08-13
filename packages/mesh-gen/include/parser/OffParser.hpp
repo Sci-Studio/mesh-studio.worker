@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Parser.hpp"
-#include "DataStructures.hpp"
+#include "geometry/Mesh.hpp"
 
 namespace parser {
-    namespace off {
-    
-        class OffParser: public Parser {
-            
-            public:
-                bool loadMesh(const char* path, Mesh& mesh) override;
-        };
-    }
+  namespace off {
+
+    class OffParser : public Parser {
+      public:
+        bool loadMesh(const char* path, geometry::Mesh& mesh) override;
+    };
+
+  }
 }

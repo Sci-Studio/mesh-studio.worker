@@ -1,5 +1,5 @@
 #pragma once
 
-#include "DataStructures.hpp"
+#include "geometry/Mesh.hpp"
 
-bool triangulate(Mesh& mesh);
+bool triangulate(geometry::Mesh& mesh);

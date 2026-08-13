@@ -1,11 +1,10 @@
-#include "Mesh2D.hpp"
-
+#include "geometry/Mesh.hpp"
 #include "geometry/Predicates.hpp"
 
 #include <algorithm>
 #include <fstream>
 
-
+using namespace geometry;
 
 bool allTrianglesCcw(const Mesh& mesh) {
   for (size_t i = 0; i < mesh.triangles.size(); ++i) {
