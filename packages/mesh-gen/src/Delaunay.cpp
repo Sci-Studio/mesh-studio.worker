@@ -52,9 +52,9 @@ bool triangulate(Mesh& mesh) {
 
         for (int ti = 0; ti < static_cast<int>(mesh.triangles.size()); ++ti) {
             const Triangle& t = mesh.triangles[ti];
-            const Point& a = mesh.points[t.v[0]];
-            const Point& b = mesh.points[t.v[1]];
-            const Point& c = mesh.points[t.v[2]];
+            const Point& a = mesh.points[t.vertices[0]];
+            const Point& b = mesh.points[t.vertices[1]];
+            const Point& c = mesh.points[t.vertices[2]];
             if (inCircle(a, b, c, p) > 0.0) {
                 bad.push_back(ti);
             }
@@ -66,7 +66,7 @@ bool triangulate(Mesh& mesh) {
 
         for (size_t bi = 0; bi < bad.size(); ++bi) {
             const Triangle& t = mesh.triangles[bad[bi]];
-            const int verts[Triangle::kVertexCount] = {t.v[0], t.v[1], t.v[2]};
+            const int verts[Triangle::kVertexCount] = { t.vertices[0], t.vertices[1], t.vertices[2] };
             for (unsigned int e = 0; e < Triangle::kVertexCount; ++e) {
                 const int a = verts[e];
                 const int b = verts[(e + 1) % Triangle::kVertexCount];
@@ -106,7 +106,7 @@ bool triangulate(Mesh& mesh) {
         kept.reserve(mesh.triangles.size());
         for (size_t i = 0; i < mesh.triangles.size(); ++i) {
             const Triangle& t = mesh.triangles[i];
-            if (t.v[0] >= n || t.v[1] >= n || t.v[2] >= n) {
+            if (t.vertices[0] >= n || t.vertices[1] >= n || t.vertices[2] >= n) {
                 continue;
             }
             kept.push_back(t);

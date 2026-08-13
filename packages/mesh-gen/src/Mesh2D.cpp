@@ -53,9 +53,9 @@ bool writeSvg(const Mesh& mesh, const std::string& path) {
       << "\" fill=\"none\">\n";
   for (size_t i = 0; i < mesh.triangles.size(); ++i) {
     const Triangle& t = mesh.triangles[i];
-    const Point& a = mesh.points[t.v[0]];
-    const Point& b = mesh.points[t.v[1]];
-    const Point& c = mesh.points[t.v[2]];
+    const Point& a = mesh.points[t.vertices[0]];
+    const Point& b = mesh.points[t.vertices[1]];
+    const Point& c = mesh.points[t.vertices[2]];
     out << "    <polygon points=\"" << a.x << "," << a.y << " " << b.x << ","
         << b.y << " " << c.x << "," << c.y << "\" />\n";
   }

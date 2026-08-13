@@ -14,9 +14,9 @@ namespace geometry {
   bool Mesh::allTrianglesCcw() {
     for (size_t i = 0; i < this->triangles.size(); ++i) {
       const Triangle& t = this->triangles[i];
-      const Point& a = this->points[t.v[0]];
-      const Point& b = this->points[t.v[1]];
-      const Point& c = this->points[t.v[2]];
+      const Point& a = this->points[t.vertices[0]];
+      const Point& b = this->points[t.vertices[1]];
+      const Point& c = this->points[t.vertices[2]];
       if (orient2D(a, b, c) <= 0.0) {
         return false;
       }
@@ -28,11 +28,11 @@ namespace geometry {
     const int n = static_cast<int>(this->points.size());
     for (size_t ti = 0; ti < this->triangles.size(); ++ti) {
       const Triangle& t = this->triangles[ti];
-      const Point& a = this->points[t.v[0]];
-      const Point& b = this->points[t.v[1]];
-      const Point& c = this->points[t.v[2]];
+      const Point& a = this->points[t.vertices[0]];
+      const Point& b = this->points[t.vertices[1]];
+      const Point& c = this->points[t.vertices[2]];
       for (int pi = 0; pi < n; ++pi) {
-        if (pi == t.v[0] || pi == t.v[1] || pi == t.v[2]) {
+        if (pi == t.vertices[0] || pi == t.vertices[1] || pi == t.vertices[2]) {
           continue;
         }
         if (inCircle(a, b, c, this->points[pi]) > 0.0) {

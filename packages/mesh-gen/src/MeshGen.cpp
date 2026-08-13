@@ -42,9 +42,9 @@ int writeMeshToFile(const Mesh& mesh, const std::string& path) {
   
   out << "  <g stroke=\"#bbb\" stroke-width=\"0.1\" fill=\"none\">\n";
   for (auto triangle : mesh.triangles) {
-    const Point& a = mesh.points[triangle.v[0]];
-    const Point& b = mesh.points[triangle.v[1]];
-    const Point& c = mesh.points[triangle.v[2]];
+    const Point& a = mesh.points[triangle.vertices[0]];
+    const Point& b = mesh.points[triangle.vertices[1]];
+    const Point& c = mesh.points[triangle.vertices[2]];
     out << "    <polygon points=\"" << a.x << "," << a.y << " "
                                     << b.x << "," << b.y << " "
                                     << c.x << "," << c.y << "\" />\n";
@@ -102,8 +102,8 @@ int generateMesh(const char* inputPath) {
   std::cout << "Triangles: " << mesh.triangles.size() << "\n";
   for (size_t i = 0; i < mesh.triangles.size(); ++i) {
     const Triangle& t = mesh.triangles[i];
-    std::cout << "  [" << i << "] (" << t.v[0] << ", " << t.v[1] << ", "
-              << t.v[2] << ")\n";
+    std::cout << "  [" << i << "] (" << t.vertices[0] << ", " << t.vertices[1] << ", "
+              << t.vertices[2] << ")\n";
   }
 
   if (!mesh.allTrianglesCcw()) {
