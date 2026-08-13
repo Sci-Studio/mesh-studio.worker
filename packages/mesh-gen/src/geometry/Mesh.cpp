@@ -1,5 +1,8 @@
 #include "geometry/Mesh.hpp"
 #include "geometry/Predicates.hpp"
+
+#include <cmath>
+
 namespace geometry {
 
   void Mesh::clear() {
@@ -38,5 +41,39 @@ namespace geometry {
       }
     }
     return true;
+  }
+
+  int Mesh::addUnique(const Point& point) {
+    constexpr double eps = 1e-9;
+
+    for (auto existingPoint : points) {
+
+      if (std::abs(existingPoint.x - point.x) <= eps &&
+          std::abs(existingPoint.y - point.y) <= eps) {
+            return static_cast<int>(existingPoint.index);
+        }
+    } 
+    Point p = point;
+    p.index = static_cast<int>(points.size());
+    points.push_back(p);
+    return p.index;
+  }
+
+  void Mesh::addConstraintEdge(int i0, int i1) {
+    if (i0 != i1) {
+        constraints.push_back(Edge(i0, i1));
+    }
+  }
+
+  void Mesh::addPolylineConstraints(const std::vector<Point>& polyline) {
+    if (polyline.size() < 2) {
+        return;
+    }
+    int previous = addUnique(polyline[0]);
+    for (size_t i = 1; i < polyline.size(); ++i) {
+        const int current = addUnique(polyline[i]);
+        addConstraintEdge( previous, current);
+        previous = current;
+    }
   }
 }  
