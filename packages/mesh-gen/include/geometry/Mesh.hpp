@@ -10,11 +10,13 @@ namespace geometry {
 
   class Mesh {
     public:
-     std::vector<Point> points;
-     std::vector<Triangle> triangles;
-     std::vector<Edge> constraints;
+      std::vector<Point> points;
+      std::vector<Triangle> triangles;
+      std::vector<Edge> constraints;
 
-     void clear();
+      void clear();
+      bool allTrianglesCcw();
+      bool isDelaunay();
   };
 
 }

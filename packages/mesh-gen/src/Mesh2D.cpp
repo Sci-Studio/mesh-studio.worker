@@ -1,42 +1,9 @@
 #include "geometry/Mesh.hpp"
-#include "geometry/Predicates.hpp"
 
 #include <algorithm>
 #include <fstream>
 
 using namespace geometry;
-
-bool allTrianglesCcw(const Mesh& mesh) {
-  for (size_t i = 0; i < mesh.triangles.size(); ++i) {
-    const Triangle& t = mesh.triangles[i];
-    const Point& a = mesh.points[t.v[0]];
-    const Point& b = mesh.points[t.v[1]];
-    const Point& c = mesh.points[t.v[2]];
-    if (orient2D(a, b, c) <= 0.0) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool isDelaunay(const Mesh& mesh) {
-  const int n = static_cast<int>(mesh.points.size());
-  for (size_t ti = 0; ti < mesh.triangles.size(); ++ti) {
-    const Triangle& t = mesh.triangles[ti];
-    const Point& a = mesh.points[t.v[0]];
-    const Point& b = mesh.points[t.v[1]];
-    const Point& c = mesh.points[t.v[2]];
-    for (int pi = 0; pi < n; ++pi) {
-      if (pi == t.v[0] || pi == t.v[1] || pi == t.v[2]) {
-        continue;
-      }
-      if (inCircle(a, b, c, mesh.points[pi]) > 0.0) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
 
 bool writeSvg(const Mesh& mesh, const std::string& path) {
   

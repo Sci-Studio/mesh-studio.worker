@@ -106,13 +106,13 @@ int generateMesh(const char* inputPath) {
               << t.v[2] << ")\n";
   }
 
-  if (!allTrianglesCcw(mesh)) {
+  if (!mesh.allTrianglesCcw()) {
     std::cerr << "Validation failed: not all triangles are CCW\n";
     return 3;
   }
   // Strict Delaunay often fails on arc samples (many cocircular points). Keep CCW hard;
   // treat Delaunay as a warning until CDT is in place.
-  if (!isDelaunay(mesh)) {
+  if (!mesh.isDelaunay()) {
     std::cerr << "Warning: triangulation is not strictly Delaunay "
                  "(common with sampled arcs)\n";
   } else {
