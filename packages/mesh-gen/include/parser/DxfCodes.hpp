@@ -3,30 +3,42 @@
 namespace parser {
     namespace dxf {
 
-        typedef unsigned int GROUP_CODE;
-        typedef const char* ENTITY_NAME;
+        using GROUP_CODE = unsigned int;
+        using ENTITY_NAME = const char*;
 
-        // Group codes
-        constexpr GROUP_CODE ENTITY_TYPE = 0;
-        constexpr GROUP_CODE NAME = 2;
-        constexpr GROUP_CODE START_X = 10;   // LINE start / ARC center / SPLINE control X
-        constexpr GROUP_CODE END_X = 11;
-        constexpr GROUP_CODE START_Y = 20;
-        constexpr GROUP_CODE END_Y = 21;
-        constexpr GROUP_CODE START_Z = 30;
-        constexpr GROUP_CODE END_Z = 31;
-        constexpr GROUP_CODE RADIUS = 40;
-        constexpr GROUP_CODE START_ANGLE = 50;  // degrees, CCW from +X
-        constexpr GROUP_CODE END_ANGLE = 51;
-        constexpr GROUP_CODE SPLINE_DEGREE = 71;
-        constexpr GROUP_CODE SPLINE_KNOT   = 40;
+        namespace common {
+            constexpr GROUP_CODE ENTITY_TYPE = 0;
+            constexpr GROUP_CODE NAME = 2;
 
-        // Entity Names
-        inline constexpr ENTITY_NAME ENTITIES = "ENTITIES";
-        inline constexpr ENTITY_NAME ENDSEC = "ENDSEC";
-        inline constexpr ENTITY_NAME LINE = "LINE";
-        inline constexpr ENTITY_NAME ARC = "ARC";
-        inline constexpr ENTITY_NAME SPLINE = "SPLINE";
+            inline constexpr ENTITY_NAME ENTITIES = "ENTITIES";
+            inline constexpr ENTITY_NAME ENDSEC = "ENDSEC";
+            inline constexpr ENTITY_NAME LINE = "LINE";
+            inline constexpr ENTITY_NAME ARC = "ARC";
+            inline constexpr ENTITY_NAME SPLINE = "SPLINE";
+        } 
 
-    }
-}
+        namespace line {
+            constexpr GROUP_CODE START_X = 10;
+            constexpr GROUP_CODE START_Y = 20;
+            constexpr GROUP_CODE END_X = 11;
+            constexpr GROUP_CODE END_Y = 21;
+        }  
+
+        namespace arc {
+            constexpr GROUP_CODE CENTER_X = 10;
+            constexpr GROUP_CODE CENTER_Y = 20;
+            constexpr GROUP_CODE RADIUS = 40;
+            constexpr GROUP_CODE START_ANGLE = 50;  // degrees, CCW from +X
+            constexpr GROUP_CODE END_ANGLE = 51;
+        }  
+
+        namespace spline {
+            constexpr GROUP_CODE CONTROL_X = 10;
+            constexpr GROUP_CODE CONTROL_Y = 20;
+            constexpr GROUP_CODE KNOT = 40;
+            constexpr GROUP_CODE WEIGHT = 41;
+            constexpr GROUP_CODE DEGREE = 71;
+        } 
+
+    } 
+} 
