@@ -60,13 +60,13 @@ void dxf::DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& 
 
 void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
     Arc arc;
-    ArcDiscretizationOption options(0.01, 10);
+    DiscretizationOptions options;
 
     while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
         if (code == dxf::arc::CENTER_X) {
-            arc.centerX = std::stod(value);
+            arc.center.x = std::stod(value);
         } else if (code == dxf::arc::CENTER_Y) {
-            arc.centerY = std::stod(value);
+            arc.center.y = std::stod(value);
         } else if (code == dxf::arc::RADIUS) {
             arc.radius = std::stod(value);
         } else if (code == dxf::arc::START_ANGLE) {
@@ -80,9 +80,7 @@ void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& c
         return;
     }
 
-    auto polyline = arc.discretizeArc(options);
-
-    mesh.addPolylineConstraints(polyline, false);
+    mesh.addPolylineConstraints(arc.discretize(options), arc.isClosed());
 }
 
 void dxf::DxfParser::parseCircle(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
@@ -111,7 +109,7 @@ void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE
 
     Spline spline;
     Point current;
-    GeometryTolerance geometryTolerance;
+    DiscretizationOptions options;
     bool haveX = false;
 
     while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
@@ -129,9 +127,7 @@ void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE
         }
     }
 
-    const auto polyline = spline.discretizeSpline(geometryTolerance);
-
-    mesh.addPolylineConstraints(polyline, false);
+    mesh.addPolylineConstraints(spline.discretize(options), spline.isClosed());
 }
 
 void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {

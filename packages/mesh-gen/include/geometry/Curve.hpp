@@ -9,6 +9,7 @@ namespace geometry {
   struct DiscretizationOptions {
     double maxChordError = 0.01;
     double maxAngleDegree = 10.0;
+    double pointMerge = 1e-8;
   };
 
   class Curve {

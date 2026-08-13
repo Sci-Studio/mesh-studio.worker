@@ -1,23 +1,21 @@
 #pragma once
 
+#include "Curve.hpp"
 #include "Point.hpp"
 
 #include <vector>
 
 namespace geometry {
 
-    struct GeometryTolerance {
-        double pointMerge = 1e-8;
-        double chordError = 1e-2;
-    };
+  class Spline : public Curve {
+    public:
+      int degree = 0;
+      std::vector<Point> controlPoints;
+      std::vector<double> knots;
+      std::vector<double> weights;
+    
+      std::vector<Point> discretize(const DiscretizationOptions& options) const override;
+      bool isClosed() const override;
+  };
 
-    class Spline {
-        public:
-            int degree = 0;
-            std::vector<Point> controlPoints;
-            std::vector<double> knots;
-            std::vector<double> weights;
-
-            std::vector<Point> discretizeSpline(const GeometryTolerance& tolerance);
-    };
 }
