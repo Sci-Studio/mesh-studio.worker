@@ -1,6 +1,8 @@
 #include "parser/DxfParser.hpp"
 #include "geometry/Point.hpp"
 #include "geometry/Arc.hpp"
+#include "geometry/Spline.hpp"
+#include "parser/DxfCodes.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -118,46 +120,31 @@ void DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, 
 }
 
 void DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
-    // Control polyline: successive group 10/20 pairs (degree-1 FreeCAD exports are collinear).
-    std::vector<Point> control;
+
+    Spline spline;
     Point current;
+    GeometryTolerance geometryTolerance;
     bool haveX = false;
 
     while (readPair(inputFile, code, value) && code != dxf::ENTITY_TYPE) {
-        if (code == dxf::START_X) {
-            current.x = std::atof(value.c_str());
+        
+        if (code == dxf::SPLINE_DEGREE) {
+            spline.degree = std::stoi(value);
+        } else if (code == dxf::START_X) {
+            current.x = std::stoi(value);
             haveX = true;
         } else if (code == dxf::START_Y && haveX) {
-            current.y = std::atof(value.c_str());
-            current.type = PointType::NORMAL;
-            control.push_back(current);
+            current.y = std::stod(value);
+            spline.controlPoints.push_back(current);
             haveX = false;
-        }
+        } else if (code == dxf::SPLINE_KNOT) {
+            spline.knots.push_back(std::stod(value));
+        } 
     }
 
-    if (control.size() < 2) {
-        return;
-    }
+    const auto polyline = spline.discretizeSpline(geometryTolerance);
 
-    // Collapse nearly collinear control polygons to endpoints (common for degree-1 exports).
-    constexpr double collinearEps = 1e-9;
-    bool collinear = true;
-    const Point& a = control.front();
-    const Point& b = control.back();
-    for (size_t i = 1; i + 1 < control.size(); ++i) {
-        const Point& p = control[i];
-        const double cross = (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
-        if (std::abs(cross) > collinearEps) {
-            collinear = false;
-            break;
-        }
-    }
-
-    if (collinear) {
-        addConstraintEdge(mesh, addUnique(mesh.points, a), addUnique(mesh.points, b));
-    } else {
-        addPolylineConstraints(mesh, control);
-    }
+    addPolylineConstraints(mesh, polyline);
 }
 
 void DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
