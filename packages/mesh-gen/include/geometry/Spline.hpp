@@ -3,7 +3,6 @@
 #include "Curve.hpp"
 #include "Point.hpp"
 
-#include <vector>
 
 namespace geometry {
 
