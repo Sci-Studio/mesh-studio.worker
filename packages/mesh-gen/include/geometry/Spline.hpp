@@ -19,6 +19,5 @@ namespace geometry {
             std::vector<double> weights;
 
             std::vector<Point> discretizeSpline(const GeometryTolerance& tolerance);
-            bool areCollinear(const std::vector<Point>& points, double distanceTolerance);
     };
 }

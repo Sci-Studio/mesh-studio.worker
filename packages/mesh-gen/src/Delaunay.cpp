@@ -1,6 +1,6 @@
 #include "Delaunay.hpp"
 #include "DataStructures.hpp"
-#include "Predicates.hpp"
+#include "geometry/Predicates.hpp"
 #include "geometry/Point.hpp"
 
 #include <map>
