@@ -26,6 +26,7 @@ add_library(MeshGen SHARED
   src/geometry/Spline.cpp
   src/geometry/GeometryUtils.cpp
   src/geometry/Mesh.cpp
+  src/file-writer/SvgFileWriter.cpp
   src/parser/DxfParser.cpp
   src/parser/OffParser.cpp
 )

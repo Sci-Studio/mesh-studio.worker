@@ -1,6 +1,5 @@
 #include "geometry/Mesh.hpp"
 
-#include <algorithm>
 #include <fstream>
 
 using namespace geometry;

@@ -14,8 +14,6 @@ coverage/
 .DS_Store
 .idea/
 .vscode/
-.clangd
-compile_commands.json
 
 # Cache
 .cache/
