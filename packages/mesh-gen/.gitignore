@@ -1,0 +1,9 @@
+# Cache
+.cache/
+
+# temporary output files
+/tmp
+
+# IDE / OS
+compile_commands.json
+.clangd
