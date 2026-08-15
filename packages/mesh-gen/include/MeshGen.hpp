@@ -1,10 +1,8 @@
 #pragma once
 
+#include "geometry/Mesh.hpp"
 
-/**
- * Writes "Hello World" to the file called mesh.node.
- * Returns 0 on success, non-zero on failure.
- */
-int writeMeshToFile(const char* outputPath);
+#include <string>
 
+int writeMeshToFile(const geometry::Mesh& mesh, const std::string& path);
 int generateMesh(const char* inputPath);

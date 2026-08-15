@@ -1,46 +1,32 @@
 #include "parser/DxfParser.hpp"
+#include "geometry/Mesh.hpp"
 #include "geometry/Point.hpp"
+#include "geometry/Arc.hpp"
+#include "geometry/Circle.hpp"
+#include "geometry/Curve.hpp"
+#include "geometry/Spline.hpp"
+#include "parser/DxfCodes.hpp"
 
-#include <algorithm>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <fstream>
 
-using namespace parser::dxf;
+using namespace parser;
+using namespace geometry;
 
-bool DxfParser::addUnique(std::vector<Point>& points, const Point& point) {
-
-    constexpr double eps = 1e-9;
-
-    bool contains = std::ranges::any_of(points, [&](const Point& existing) {
-        return std::abs(existing.x - point.x) <= eps &&
-               std::abs(existing.y - point.y) <= eps;
-    });
-
-    if (!contains) {
-        Point p = point;
-        p.index = static_cast<int>(points.size());
-        p.type = PointType::NORMAL; 
-        points.push_back(p);
-        return true;
-    }
-
-    return false;
-}
-
-bool DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::string& value) {
+bool dxf::DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::string& value) {
 
     std::string line;
     std::istringstream istringstream;
 
-    if(!std::getline(inputFile, line)) {
+    if (!std::getline(inputFile, line)) {
         return false;
     }
     istringstream.str(line);
     istringstream >> code;
 
-    if(!std::getline(inputFile, line)) {
+    if (!std::getline(inputFile, line)) {
         return false;
     }
     istringstream.clear();
@@ -50,43 +36,127 @@ bool DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::string&
     return true;
 }
 
-void DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void dxf::DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
 
     Point start;
     Point end;
     start.x = start.y = 0.0;
     end.x = end.y = 0.0;
 
-    while(readPair(inputFile, code, value) && code != 0) {
-        if (code == dxf::START_X) {
+    while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
+        if (code == dxf::line::START_X) {
             start.x = std::atof(value.c_str());
-        } else if (code == dxf::START_Y) {
+        } else if (code == dxf::line::START_Y) {
             start.y = std::atof(value.c_str());
-        } else if (code == dxf::END_X) {
+        } else if (code == dxf::line::END_X) {
             end.x = std::atof(value.c_str());
-        } else if (code == dxf::END_Y) {
+        } else if (code == dxf::line::END_Y) {
             end.y = std::atof(value.c_str());
         }
     }
 
-    addUnique(mesh.points, start);
-    addUnique(mesh.points, end);
-
+    mesh.addConstraintEdge(mesh.addUnique( start ), mesh.addUnique(end));
 }
 
-void DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+    Arc arc;
+    DiscretizationOptions options;
 
-    while(code == dxf::ENTITY_TYPE && value != dxf::ENDSEC) {
-        if (code == dxf::ENTITY_TYPE && value == dxf::LINE) {
+    while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
+        if (code == dxf::arc::CENTER_X) {
+            arc.center.x = std::stod(value);
+        } else if (code == dxf::arc::CENTER_Y) {
+            arc.center.y = std::stod(value);
+        } else if (code == dxf::arc::RADIUS) {
+            arc.radius = std::stod(value);
+        } else if (code == dxf::arc::START_ANGLE) {
+            arc.startAngleDegree = std::stod(value);
+        } else if (code == dxf::arc::END_ANGLE) {
+            arc.endAngleDegree = std::stod(value);
+        }
+    }
+
+    if (arc.radius <= 0.0) {
+        return;
+    }
+
+    mesh.addPolylineConstraints(arc.discretize(options), arc.isClosed());
+}
+
+void dxf::DxfParser::parseCircle(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
+                                 std::string& value) {
+    Circle circle;
+    DiscretizationOptions options;
+
+    while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
+        if (code == dxf::circle::CENTER_X) {
+            circle.center.x = std::stod(value);
+        } else if (code == dxf::circle::CENTER_Y) {
+            circle.center.y = std::stod(value);
+        } else if (code == dxf::circle::RADIUS) {
+            circle.radius = std::stod(value);
+        }
+    }
+
+    if (circle.radius <= 0.0) {
+        return;
+    }
+
+    mesh.addPolylineConstraints(circle.discretize(options), circle.isClosed());
+}
+
+void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+
+    Spline spline;
+    Point current;
+    DiscretizationOptions options;
+    bool haveX = false;
+
+    while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
+        if (code == dxf::spline::DEGREE) {
+            spline.degree = std::stoi(value);
+        } else if (code == dxf::spline::CONTROL_X) {
+            current.x = std::stod(value);
+            haveX = true;
+        } else if (code == dxf::spline::CONTROL_Y && haveX) {
+            current.y = std::stod(value);
+            spline.controlPoints.push_back(current);
+            haveX = false;
+        } else if (code == dxf::spline::KNOT) {
+            spline.knots.push_back(std::stod(value));
+        }
+    }
+
+    mesh.addPolylineConstraints(spline.discretize(options), spline.isClosed());
+}
+
+void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+
+    while (code == dxf::common::ENTITY_TYPE && value != dxf::common::ENDSEC) {
+        if (value == dxf::common::LINE) {
             parseLine(inputFile, mesh, code, value);
             continue;
+        }
+        if (value == dxf::common::ARC) {
+            parseArc(inputFile, mesh, code, value);
+            continue;
+        }
+        if (value == dxf::common::CIRCLE) {
+            parseCircle(inputFile, mesh, code, value);
+            continue;
+        }
+        if (value == dxf::common::SPLINE) {
+            parseSpline(inputFile, mesh, code, value);
+            continue;
+        }
+        // Skip unsupported entities until the next group-0 marker.
+        while (readPair(inputFile, code, value) && code != dxf::common::ENTITY_TYPE) {
         }
     }
 }
 
-bool DxfParser::loadMesh(const char* path, Mesh& mesh) {
-    mesh.points.clear();
-    mesh.triangles.clear();
+bool dxf::DxfParser::loadMesh(const char* path, Mesh& mesh) {
+    mesh.clear();
 
     std::ifstream inputFile(path);
     if (!inputFile) {
@@ -94,17 +164,15 @@ bool DxfParser::loadMesh(const char* path, Mesh& mesh) {
       return false;
     }
 
-    std::string line;
     std::string value;
     GROUP_CODE code = 0;
 
-    while(readPair(inputFile, code, value)) {
-
-        if(code == dxf::NAME && value == dxf::ENTITIES) {
+    while (readPair(inputFile, code, value)) {
+        if (code == dxf::common::NAME && value == dxf::common::ENTITIES) {
             readPair(inputFile, code, value);
             parseEntites(inputFile, mesh, code, value);
             break;
-        }    
+        }
     }
 
     return true;
