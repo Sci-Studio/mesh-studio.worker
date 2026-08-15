@@ -19,7 +19,6 @@ enable_testing()
 add_library(MeshGen SHARED
   src/MeshGen.cpp
   src/Delaunay.cpp
-  src/Mesh2D.cpp
   src/geometry/Predicates.cpp
   src/geometry/Arc.cpp
   src/geometry/Circle.cpp
