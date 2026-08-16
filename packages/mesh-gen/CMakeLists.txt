@@ -29,6 +29,12 @@ if(ENABLE_SANITIZERS)
   )
 endif() 
 
+if(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    add_compile_options(
+        -fno-omit-frame-pointer
+    )
+endif()
+
 # Shared library -> libMeshGen.so
 add_library(MeshGen SHARED
   src/MeshGen.cpp
