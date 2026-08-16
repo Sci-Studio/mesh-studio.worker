@@ -15,6 +15,20 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+option(ENABLE_SANITIZERS "Enable Address/Undefined/Leak sanitizers" OFF)
+
+if(ENABLE_SANITIZERS)
+  add_compile_options(
+    -fsanitize=address,undefined
+    -fno-omit-frame-pointer
+    -g
+  )
+
+  add_link_options(
+    -fsanitize=address,undefined
+  )
+endif() 
+
 # Shared library -> libMeshGen.so
 add_library(MeshGen SHARED
   src/MeshGen.cpp

@@ -34,10 +34,21 @@ This produces:
 
 `CMAKE_EXPORT_COMPILE_COMMANDS` is enabled, so CMake also writes `build/compile_commands.json`.
 
+## Build with Address Sanitizer
+From this directory (`packages/mesh-gen`):
+```bash
+cmake -S . -B build-asan -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZERS=ON
+cmake --build build-asan
+```
+
 ## Run
 
 ```bash
 ./build/meshgen path/to/input.dxf
+# for build-asan:
+./build-asan/meshgen data/rectangle-prism-Shape2DView.dxf
+# or:
+ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 ./build-asan/meshgen data/rectangle-prism-Shape2DView.dxf
 ```
 
 Example with a bundled fixture:
