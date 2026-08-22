@@ -2,8 +2,8 @@
 
 #include "Point.hpp"
 
-#include <vector>
 #include <numbers>
+#include <vector>
 
 namespace geometry {
 
@@ -13,10 +13,10 @@ namespace geometry {
         double minX, maxX;
         double minY, maxY;
     };
-    
+
     BoundingBox getboundingBox(const std::vector<Point>& points);
     double ccwSpanDegrees(const double& startAngleDegree, const double& endAngleDegree);
     double degreeToRadians(const double& degree);
-    Point pointOnCircle(const double& centerX, const double& centerY, const double& radius, const double& angleDegree);
-}
-
+    Point pointOnCircle(const double& centerX, const double& centerY, const double& radius,
+                        const double& angleDegree);
+} // namespace geometry

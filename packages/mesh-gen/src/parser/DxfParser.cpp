@@ -1,16 +1,16 @@
 #include "parser/DxfParser.hpp"
-#include "geometry/Mesh.hpp"
-#include "geometry/Point.hpp"
 #include "geometry/Arc.hpp"
 #include "geometry/Circle.hpp"
 #include "geometry/Curve.hpp"
+#include "geometry/Mesh.hpp"
+#include "geometry/Point.hpp"
 #include "geometry/Spline.hpp"
 #include "parser/DxfCodes.hpp"
 
-#include <iostream>
-#include <string>
-#include <sstream>
 #include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 using namespace parser;
 using namespace geometry;
@@ -36,7 +36,8 @@ bool dxf::DxfParser::readPair(std::istream& inputFile, GROUP_CODE& code, std::st
     return true;
 }
 
-void dxf::DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void dxf::DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
+                               std::string& value) {
 
     Point start;
     Point end;
@@ -55,10 +56,11 @@ void dxf::DxfParser::parseLine(std::istream& inputFile, Mesh& mesh, GROUP_CODE& 
         }
     }
 
-    mesh.addConstraintEdge(mesh.addUnique( start ), mesh.addUnique(end));
+    mesh.addConstraintEdge(mesh.addUnique(start), mesh.addUnique(end));
 }
 
-void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void dxf::DxfParser::parseArc(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
+                              std::string& value) {
     Arc arc;
     DiscretizationOptions options;
 
@@ -105,7 +107,8 @@ void dxf::DxfParser::parseCircle(std::istream& inputFile, Mesh& mesh, GROUP_CODE
     mesh.addPolylineConstraints(circle.discretize(options), circle.isClosed());
 }
 
-void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
+                                 std::string& value) {
 
     Spline spline;
     Point current;
@@ -130,7 +133,8 @@ void dxf::DxfParser::parseSpline(std::istream& inputFile, Mesh& mesh, GROUP_CODE
     mesh.addPolylineConstraints(spline.discretize(options), spline.isClosed());
 }
 
-void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code, std::string& value) {
+void dxf::DxfParser::parseEntites(std::istream& inputFile, Mesh& mesh, GROUP_CODE& code,
+                                  std::string& value) {
 
     while (code == dxf::common::ENTITY_TYPE && value != dxf::common::ENDSEC) {
         if (value == dxf::common::LINE) {
@@ -160,8 +164,8 @@ bool dxf::DxfParser::loadMesh(const char* path, Mesh& mesh) {
 
     std::ifstream inputFile(path);
     if (!inputFile) {
-      std::cerr << "Failed to open .dxf file: " << path << std::endl;
-      return false;
+        std::cerr << "Failed to open .dxf file: " << path << std::endl;
+        return false;
     }
 
     std::string value;

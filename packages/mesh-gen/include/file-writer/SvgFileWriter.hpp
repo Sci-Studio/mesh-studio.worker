@@ -7,9 +7,9 @@ namespace writer {
 
     class SvgFileWriter : FileWriter {
 
-        public:
-            using FileWriter::FileWriter;
+      public:
+        using FileWriter::FileWriter;
 
-            bool saveMeshToOutputFile(const geometry::Mesh& mesh) override;
+        bool saveMeshToOutputFile(const geometry::Mesh& mesh) override;
     };
-}
+} // namespace writer
