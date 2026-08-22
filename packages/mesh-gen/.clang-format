@@ -22,3 +22,5 @@ AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 
 SortIncludes: CaseSensitive
+
+InsertNewlineAtEOF: true
