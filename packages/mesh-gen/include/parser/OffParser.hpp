@@ -4,12 +4,12 @@
 #include "geometry/Mesh.hpp"
 
 namespace parser {
-  namespace off {
+    namespace off {
 
-    class OffParser : public Parser {
-      public:
-        bool loadMesh(const char* path, geometry::Mesh& mesh) override;
-    };
+        class OffParser : public Parser {
+          public:
+            bool loadMesh(const char* path, geometry::Mesh& mesh) override;
+        };
 
-  }
-}
+    } // namespace off
+} // namespace parser

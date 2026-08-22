@@ -1,9 +1,9 @@
-#include <gtest/gtest.h>
+#include "geometry/Mesh.hpp"
+#include "geometry/Point.hpp"
+#include "parser/DxfParser.hpp"
 #include <algorithm>
 #include <cmath>
-#include "geometry/Mesh.hpp"
-#include "parser/DxfParser.hpp"
-#include "geometry/Point.hpp"
+#include <gtest/gtest.h>
 
 using namespace geometry;
 
@@ -22,21 +22,13 @@ TEST(ParseDFXFile, ReturnsPointsInDfx) {
 
     constexpr double eps = 1e-9;
 
-    auto p0It = std::ranges::find_if(
-      mesh.points,
-      [&](const Point& p)
-      {
-          return std::abs(p0.x - p.x) < eps &&
-                 std::abs(p0.y - p.y) < eps;
-      });
+    auto p0It = std::ranges::find_if(mesh.points, [&](const Point& p) {
+        return std::abs(p0.x - p.x) < eps && std::abs(p0.y - p.y) < eps;
+    });
 
-    auto p1It = std::ranges::find_if(
-      mesh.points,
-      [&](const Point& p)
-      {
-          return std::abs(p1.x - p.x) < eps &&
-                 std::abs(p1.y - p.y) < eps;
-      });
+    auto p1It = std::ranges::find_if(mesh.points, [&](const Point& p) {
+        return std::abs(p1.x - p.x) < eps && std::abs(p1.y - p.y) < eps;
+    });
 
     EXPECT_NE(p0It, mesh.points.end());
     EXPECT_NE(p1It, mesh.points.end());
@@ -64,13 +56,13 @@ TEST(ParseDFXFile, LineEntitiesPopulateConstraintEdges) {
 
 namespace {
 
-bool hasPointNear(const std::vector<Point>& points, double x, double y, double eps = 1e-6) {
-    return std::ranges::any_of(points, [&](const Point& p) {
-        return std::abs(p.x - x) <= eps && std::abs(p.y - y) <= eps;
-    });
-}
+    bool hasPointNear(const std::vector<Point>& points, double x, double y, double eps = 1e-6) {
+        return std::ranges::any_of(points, [&](const Point& p) {
+            return std::abs(p.x - x) <= eps && std::abs(p.y - y) <= eps;
+        });
+    }
 
-}  // namespace
+} // namespace
 
 TEST(ParseDFXFile, HingeLoadsArcAndSplineConstraints) {
     Mesh mesh;

@@ -1,10 +1,10 @@
 #include "Delaunay.hpp"
 #include "geometry/Mesh.hpp"
-#include "geometry/Predicates.hpp"
 #include "geometry/Point.hpp"
+#include "geometry/Predicates.hpp"
 
-#include <map>
 #include <algorithm>
+#include <map>
 #include <vector>
 
 using namespace geometry;
@@ -32,8 +32,8 @@ bool triangulate(Mesh& mesh) {
         }
     }
 
-    const int m1 = n;      // array index of p_{-1}
-    const int m2 = n + 1;  // array index of p_{-2}
+    const int m1 = n;     // array index of p_{-1}
+    const int m2 = n + 1; // array index of p_{-2}
     mesh.points.emplace_back(Point{0.0, 0.0, PointType::MINUS1, -1});
     mesh.points.emplace_back(Point{0.0, 0.0, PointType::MINUS2, -2});
 
@@ -42,7 +42,7 @@ bool triangulate(Mesh& mesh) {
 
     for (int pi = 0; pi < n; ++pi) {
         if (pi == p0) {
-            continue;  // already a vertex of the seed triangle
+            continue; // already a vertex of the seed triangle
         }
 
         const Point& p = mesh.points[pi];
@@ -66,7 +66,7 @@ bool triangulate(Mesh& mesh) {
 
         for (size_t bi = 0; bi < bad.size(); ++bi) {
             const Triangle& t = mesh.triangles[bad[bi]];
-            const int verts[Triangle::kVertexCount] = { t.vertices[0], t.vertices[1], t.vertices[2] };
+            const int verts[Triangle::kVertexCount] = {t.vertices[0], t.vertices[1], t.vertices[2]};
             for (unsigned int e = 0; e < Triangle::kVertexCount; ++e) {
                 const int a = verts[e];
                 const int b = verts[(e + 1) % Triangle::kVertexCount];

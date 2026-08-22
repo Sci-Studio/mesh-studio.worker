@@ -11,4 +11,4 @@ namespace geometry {
     double inCircle(const Point& a, const Point& b, const Point& c, const Point& d);
     bool areCollinear(const std::vector<Point>& points, double distanceTolerance);
 
-}
+} // namespace geometry
